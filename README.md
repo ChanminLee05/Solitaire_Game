@@ -17,7 +17,7 @@ Before you begin, make sure you have the following prerequisites installed:
 1. **Clone the Repository:** Start by cloning the Solitaire game repository to your local machine. You can do this by running the following command in your terminal:
 
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/CST8334-Algonqiun/CST8334-Solitaire.git
    ```
 2. **Open Eclipse:** Launch Eclipse IDE on your computer.
 
