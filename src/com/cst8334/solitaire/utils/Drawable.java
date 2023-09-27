@@ -1,5 +1,7 @@
 package com.cst8334.solitaire.utils;
 
-public abstract class Drawable {
+import java.awt.Graphics;
 
+public interface Drawable {
+  public void draw(Graphics gc);
 }
