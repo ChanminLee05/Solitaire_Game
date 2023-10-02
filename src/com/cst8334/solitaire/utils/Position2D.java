@@ -1,4 +1,5 @@
 package com.cst8334.solitaire.utils;
+
 import java.awt.Point;
 
 public class Position2D {
