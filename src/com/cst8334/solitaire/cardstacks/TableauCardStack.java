@@ -10,6 +10,6 @@ public class TableauCardStack extends CardStack {
 	}
 	
 	public TableauCardStack(List<Card> card) {
-		
+		super();
 	}
 }
