@@ -1,5 +1,4 @@
 package com.cst8334.solitaire.utils;
-
 import java.awt.Graphics;
 
 /**
@@ -18,5 +17,4 @@ public interface Drawable {
    * @param gc The graphics context on which to draw the object.
    */
   public void draw(Graphics gc);
-  
 }
