@@ -1,6 +1,8 @@
 package com.cst8334.solitaire.cardstacks;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.List;
 import com.cst8334.solitaire.cards.Card;
 import com.cst8334.solitaire.utils.Drawable;
 import com.cst8334.solitaire.utils.Entity;
+import com.cst8334.solitaire.utils.Position2D;
 
 /**
  * The {@code CardStack} class represents a stack of playing cards.
@@ -15,16 +18,20 @@ import com.cst8334.solitaire.utils.Entity;
  * 
  * @see com.cst8334.solitaire.utils.Drawable
  * @see com.cst8334.solitaire.utils.Entity
- * @version 1.0
+ * @version 1.1
  * @since 17
  * @author Austin Kirby
  */
 public class CardStack extends Entity implements Drawable {
 
+  private static final int WIDTH = 70;
+
+  private static final int HEIGHT = 90;
+
   /**
    * The list of cards in the stack.
    */
-  private List<Card> cards;
+  private ArrayList<Card> cards;
 
   /**
    * Constructs an empty card stack.
@@ -39,7 +46,26 @@ public class CardStack extends Entity implements Drawable {
    * @param cards The list of cards to initialize the stack with.
    */
   public CardStack(List<Card> cards) {
-    this.cards = cards;
+    this(cards, new Position2D(0, 0));
+  }
+
+  /**
+   * Constructs a card stack with the specified list of cards and position.
+   * 
+   * @param cards The list of cards to initialize the stack with.
+   * @param position The position of the card stack.
+   */
+  public CardStack(List<Card> cards, Position2D position) {
+    super(position, STACK_WIDTH, STACK_HEIGHT);
+    this.cards = new ArrayList<>(cards);
+  }
+
+  /**
+   * Sets the list of cards in the stack.
+   * @param cards The list of cards to set.
+   */
+  protected void setCards(List<Card> cards) {
+    this.cards = new ArrayList<>(cards);
   }
 
   /**
@@ -93,6 +119,7 @@ public class CardStack extends Entity implements Drawable {
    * @param card The card to be pushed.
    */
   public void push(Card card) {
+    if (card == null) return;
     cards.add(card);
   }
 
@@ -102,7 +129,11 @@ public class CardStack extends Entity implements Drawable {
    * @return The card that was removed from the top of the stack.
    */
   public Card pop() {
-    return cards.remove(cards.size() - 1);
+    try {
+      return cards.remove(cards.size() - 1);
+    } catch (IndexOutOfBoundsException e) {
+      return null;
+    }
   }
 
   /**
@@ -129,8 +160,12 @@ public class CardStack extends Entity implements Drawable {
    * @param gc The graphics context on which to draw the card stack.
    */
   @Override
-  public void draw(Graphics gc) {
-    // TODO - Flush this out once Entity and Position2D are implemented
+  public void draw(Graphics2D gc) {
+    gc.setColor(Color.BLACK);
     gc.drawRect(getPosition().getXpos(), getPosition().getYpos(), getWidth(), getHeight());
+    for (Drawable drawable : getCards()) {
+      if (drawable == null) continue;
+      drawable.draw(gc);
+    }
   }
 }
