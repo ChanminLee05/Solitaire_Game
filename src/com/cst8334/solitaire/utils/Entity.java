@@ -1,41 +1,107 @@
 package com.cst8334.solitaire.utils;
 
-public class Entity {
-    private Position2D position;
-    private int width;
-    private int height;
+import java.awt.Graphics;
 
-    public Entity(Position2D position, int width, int height) {
-        this.position = position;
-        this.width = width;
-        this.height = height;
-    }
-    
-    public Entity() {
-        super(); // Explicitly call the superclass constructor
-    }
+/**
+ * The {@code Entity} class represents objects that can be drawn on a graphics context and selected.
+ * It implements the {@code Drawable} and {@code Selectable} interfaces.
+ * 
+ * @see com.cst8334.solitaire.utils.Drawable
+ * @see com.cst8334.solitaire.utils.Selectable
+ * @version 1.1
+ * @since 17
+ * @author Melodie Langlois
+ * @author Austin Kirby
+ */
+public class Entity implements Drawable, Selectable {
+  private Position2D position;
+  private int width;
+  private int height;
+  private boolean selected;
 
-    public Position2D getPosition() {
-        return position;
-    }
+  /**
+   * Constructs a new instance of the {@code Entity} class with the specified position, width, and height.
+   * 
+   * @param position The position of the entity.
+   * @param width The width of the entity.
+   * @param height The height of the entity.
+   */
+  public Entity(Position2D position, int width, int height) {
+    this.position = position;
+    this.width = width;
+    this.height = height;
+    this.selected = false;
+  }
+  
+  /**
+   * Constructs a new instance of the {@code Entity} class with the specified position.
+   * By default, the position, width and height are set to 0.
+   */
+  public Entity() {
+    this(Position2D.Zero(), 0, 0);
+  }
 
-    public void setPosition(Position2D position) {
-        this.position = position;
-    }
+  /**
+   * Gets the position of the entity.
+   * @return The position of the entity.
+   */
+  public Position2D getPosition() {
+    return position;
+  }
 
-    public int getWidth() {
-        return width;
-    }
+  /**
+   * Sets the position of the entity.
+   * @param position The position of the entity.
+   */
+  public void setPosition(Position2D position) {
+    this.position = position;
+  }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
+  /**
+   * Gets the width of the entity.
+   * @return The width of the entity.
+   */
+  public int getWidth() {
+    return width;
+  }
 
-    public int getHeight() {
-        return height;
-    }
+  /**
+   * Sets the width of the entity.
+   * @param width The width of the entity.
+   */
+  public void setWidth(int width) {
+    this.width = width;
+  }
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
+  /**
+   * Gets the height of the entity.
+   * @return The height of the entity.
+   */
+  public int getHeight() {
+    return height;
+  }
+
+  /**
+   * Sets the height of the entity.
+   * @param height The height of the entity.
+   */
+  public void setHeight(int height) {
+    this.height = height;
+  }
+
+  @Override
+  public void draw(Graphics gc) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'draw'");
+  }
+
+  @Override
+  public boolean isSelected() {
+    return selected;
+  }
+
+  @Override
+  public void setSelected(boolean selected) {
+    this.selected = selected;
+  }
 }
