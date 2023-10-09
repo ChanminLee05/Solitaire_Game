@@ -56,5 +56,4 @@ public class CardStackFactory {
         return null;
     }
   }
-
 }
