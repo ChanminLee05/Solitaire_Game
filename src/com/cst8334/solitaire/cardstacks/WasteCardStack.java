@@ -1,5 +1,7 @@
 package com.cst8334.solitaire.cardstacks;
 
+
+import java.util.List;
 import java.awt.Graphics;
 import java.util.List;
 
@@ -71,6 +73,4 @@ public class WasteCardStack extends CardStack {
     // TODO - Flush this out once Entity and Position2D are implemented
     gc.drawRect(getPosition().getX(), getPosition().getY(), getWidth(), getHeight());
   }
-
-
 }
