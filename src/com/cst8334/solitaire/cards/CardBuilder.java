@@ -4,6 +4,7 @@ import com.cst8334.solitaire.cards.Card.SUITS;
 import com.cst8334.solitaire.cards.Card.VALUES;
 import com.cst8334.solitaire.utils.Position2D;
 
+
 /**
  * The {@code CardBuilder} class is a builder pattern implementation for creating instances of the {@code Card} class.
  * It allows for convenient construction of cards with specific suit, value, and face orientation settings.
@@ -17,6 +18,7 @@ public class CardBuilder {
   private SUITS suit;
   private VALUES value;
   private Position2D position;
+
   private boolean faceUP = false;
 
   /**
