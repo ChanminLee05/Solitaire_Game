@@ -154,5 +154,4 @@ public class Card extends Entity implements Drawable {
   public String toString() {
     return String.format("%s%s", value.label, suit.label);
   }
-
 }
