@@ -2,19 +2,23 @@ package com.cst8334.solitaire.cards;
 
 import com.cst8334.solitaire.cards.Card.SUITS;
 import com.cst8334.solitaire.cards.Card.VALUES;
+import com.cst8334.solitaire.utils.Position2D;
+
 
 /**
  * The {@code CardBuilder} class is a builder pattern implementation for creating instances of the {@code Card} class.
  * It allows for convenient construction of cards with specific suit, value, and face orientation settings.
  * 
  * @see com.cst8334.solitaire.cards.Card
- * @version 1.0
+ * @version 1.1
  * @since 17
  * @author Austin Kirby
  */
 public class CardBuilder {
   private SUITS suit;
   private VALUES value;
+  private Position2D position;
+
   private boolean faceUP = false;
 
   /**
@@ -51,12 +55,24 @@ public class CardBuilder {
   }
 
   /**
-   * Creates a new card instance based on the provided suit, value, and face orientation settings.
+   * Sets the position of the card.
    *
-   * @return A new {@code Card} instance with the specified suit, value, and face orientation.
+   * @param position The position of the card.
+   * @return This {@code CardBuilder} instance for method chaining.
+   */
+  public CardBuilder setPosition(Position2D position) {
+    this.position = position;
+    return this;
+  }
+
+  /**
+   * Creates a new card instance based on the provided suit, value, position, and face orientation settings.
+   *
+   * @return A new {@code Card} instance with the specified suit, value, position, and face orientation.
    * @throws IllegalStateException If the suit and/or value have not been set before creating the card.
    */
   public Card createCard() throws IllegalStateException {
+    if (position == null) this.position = Position2D.Zero();
     if (suit == null || value == null) throw new IllegalStateException("Suit and value must be set");
     return new Card(suit, value, faceUP);
   }
