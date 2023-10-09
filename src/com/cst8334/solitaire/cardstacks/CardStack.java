@@ -1,7 +1,6 @@
 package com.cst8334.solitaire.cardstacks;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +21,7 @@ import com.cst8334.solitaire.utils.Position2D;
  * @since 17
  * @author Austin Kirby
  */
-public class CardStack extends Entity implements Drawable {
+public class CardStack extends Entity {
 
   private static final int WIDTH = 70;
 
@@ -56,7 +55,7 @@ public class CardStack extends Entity implements Drawable {
    * @param position The position of the card stack.
    */
   public CardStack(List<Card> cards, Position2D position) {
-    super(position, STACK_WIDTH, STACK_HEIGHT);
+    super(position, WIDTH, HEIGHT);
     this.cards = new ArrayList<>(cards);
   }
 
@@ -83,6 +82,7 @@ public class CardStack extends Entity implements Drawable {
    * @return {@code true} if the stack is empty, {@code false} otherwise.
    */
   public boolean isEmpty() {
+    if (cards == null) return true; // Null check
     return cards.isEmpty();
   }
 
@@ -120,6 +120,7 @@ public class CardStack extends Entity implements Drawable {
    */
   public void push(Card card) {
     if (card == null) return;
+    card.setPosition(getPosition());
     cards.add(card);
   }
 
@@ -162,7 +163,7 @@ public class CardStack extends Entity implements Drawable {
   @Override
   public void draw(Graphics2D gc) {
     gc.setColor(Color.BLACK);
-    gc.drawRect(getPosition().getXpos(), getPosition().getYpos(), getWidth(), getHeight());
+    gc.drawRect(getPosition().getX(), getPosition().getY(), getWidth(), getHeight());
     for (Drawable drawable : getCards()) {
       if (drawable == null) continue;
       drawable.draw(gc);

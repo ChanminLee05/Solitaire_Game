@@ -1,11 +1,10 @@
 package com.cst8334.solitaire.cardstacks;
 
-
 import java.util.List;
-import java.awt.Graphics;
-import java.util.List;
+import java.awt.Graphics2D;
 
 import com.cst8334.solitaire.cards.Card;
+import com.cst8334.solitaire.utils.Position2D;
 
 /**
  * The {@code WasteCardStack} class represents the waste pile in a Solitaire card game.
@@ -18,16 +17,43 @@ import com.cst8334.solitaire.cards.Card;
 public class WasteCardStack extends CardStack {
 
   /**
+   * Constructs an empty waste pile.
+   */
+  public WasteCardStack() {
+    super();
+  }
+
+  /**
+   * Constructs a waste pile with the specified list of cards.
+   *
+   * @param cards The list of cards to initialize the waste pile with.
+   */
+  public WasteCardStack(List<Card> cards) {
+    super(cards);
+  }
+
+  /**
+   * Constructs a waste pile with the specified list of cards and position.
+   *
+   * @param cards The list of cards to initialize the waste pile with.
+   * @param position The position of the waste pile.
+   */
+  public WasteCardStack(List<Card> cards, Position2D position) {
+    super(cards, position);
+  }
+
+  /**
    * Overrides the pop method to flip the second last card face up before popping the last card.
    *
    * @return The last card in the waste pile.
    */
   @Override
   public Card pop() {
+    Card card = super.pop();
     // Flip the second last card face up
     getCards().get(getCards().size() - 2).setFaceUp(true);
     // Return the last card
-    return super.pop();
+    return card;
   }
 
   /**
@@ -61,16 +87,5 @@ public class WasteCardStack extends CardStack {
     getCards().forEach((card) -> card.setFaceUp(false));
     // Flip the last card face up
     getLast().setFaceUp(true);
-  }
-
-  /**
-   * Overrides the draw method to provide custom drawing logic for the waste pile.
-   *
-   * @param gc The graphics context on which to draw the waste pile.
-   */
-  @Override
-  public void draw(Graphics gc) {
-    // TODO - Flush this out once Entity and Position2D are implemented
-    gc.drawRect(getPosition().getX(), getPosition().getY(), getWidth(), getHeight());
   }
 }

@@ -55,7 +55,7 @@ public class CardStackFactory {
    * @return A new card stack of the specified type initialized with the provided cards.
    */
   public static CardStack createCardStack(TYPES type, List<Card> cards) {
-    return createCardStack(type, cards, Position2D.ZERO());
+    return createCardStack(type, cards, Position2D.Zero());
   }
 
   /**

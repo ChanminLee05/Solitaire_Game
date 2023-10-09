@@ -1,6 +1,7 @@
 package com.cst8334.solitaire;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -81,7 +82,7 @@ public class SolitaireGame extends JPanel implements ActionListener {
     // Iterate through the drawable objects in the game state and draw them
     for (Drawable drawable : state.getStacks()) {
       if (drawable == null) continue;
-      drawable.draw(gc);
+      drawable.draw((Graphics2D) gc);
     }
   }
 

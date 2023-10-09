@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
+import javax.swing.text.Position;
+
+import com.cst8334.solitaire.cards.Card;
 import com.cst8334.solitaire.cardstacks.CardStack;
 import com.cst8334.solitaire.cardstacks.CardStackFactory;
 import com.cst8334.solitaire.cardstacks.CardStackFactory.TYPES;
+import com.cst8334.solitaire.utils.Position2D;
 
 /**
  * The {@code SolitaireState} class represents the state of a Solitaire game.
@@ -95,13 +99,31 @@ public class SolitaireState {
    */
   private static List<CardStack> createInitialCardStacks() {
     List<CardStack> stacks = new ArrayList<CardStack>();
-    stacks.add(CardStackFactory.createCardStack(TYPES.DECK));
-    stacks.add(CardStackFactory.createCardStack(TYPES.WASTE));
+    stacks.add(CardStackFactory.createCardStack(TYPES.DECK, new Position2D(700, 10)));
+    stacks.add(CardStackFactory.createCardStack(TYPES.WASTE, new Position2D(600, 10)));
     for (int i = 0; i < 4; i++) {
-      stacks.add(CardStackFactory.createCardStack(TYPES.FOUNDATION));
+      stacks.add(CardStackFactory.createCardStack(TYPES.FOUNDATION, new Position2D(10 + (i * 100), 10)));
     }
     for (int i = 0; i < 7; i++) {
-      stacks.add(CardStackFactory.createCardStack(TYPES.TABLEAU));
+      stacks.add(CardStackFactory.createCardStack(TYPES.TABLEAU, new Position2D(10 + (i * 85), 150)));
+    }
+    return dealInitialCards(stacks);
+  }
+
+  /**
+   * Deals the initial cards to the card stacks from the DeckCardStack.
+   * @param stacks The list of card stacks from the initial game board setup.
+   * @return The list of card stacks with the initial cards dealt.
+   */
+  private static List<CardStack> dealInitialCards(List<CardStack> stacks) {
+    CardStack deck = stacks.get(0);
+    for (int i = 0; i <= 7; i++) {
+      CardStack tableau = stacks.get(5 + i);
+      for (int j = 0; j < i; j++) {
+        Card card = deck.pop();
+        card.setFaceUp(i == j + 1);
+        tableau.push(card);
+      }
     }
     return stacks;
   }

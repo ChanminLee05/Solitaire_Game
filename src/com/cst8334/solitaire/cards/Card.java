@@ -2,13 +2,10 @@ package com.cst8334.solitaire.cards;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import com.cst8334.solitaire.utils.Drawable;
 import com.cst8334.solitaire.utils.Entity;
 import com.cst8334.solitaire.utils.Position2D;
-import com.cst8334.solitaire.utils.Selectable;
 
 /**
  * The {@code Card} class represents a playing card with a suit, value, and face orientation.
@@ -20,9 +17,6 @@ import com.cst8334.solitaire.utils.Selectable;
  * @author Austin Kirby
  */
 public class Card extends Entity {
-
-  private static final int WIDTH = 50;
-  private static final int HEIGHT = 75;
 
   private static final int WIDTH = 50;
   private static final int HEIGHT = 75;
@@ -69,7 +63,7 @@ public class Card extends Entity {
   /**
    * A flag indicating whether the card is face up (visible) or face down (hidden).
    */
-  private boolean faceUP;
+  private boolean faceUp;
 
   /**
    * Constructs a new playing card with the specified suit and value. By default, the card is face down.
@@ -86,10 +80,10 @@ public class Card extends Entity {
    *
    * @param suit   The suit of the card (e.g., Clubs, Diamonds, Hearts, or Spades).
    * @param value  The value of the card (e.g., Ace, Two, Three, ..., King).
-   * @param faceUP A boolean indicating whether the card is face up (true) or face down (false).
+   * @param faceUp A boolean indicating whether the card is face up (true) or face down (false).
    */
-  public Card(SUITS suit, VALUES value, boolean faceUP) {
-    this(suit, value, faceUP, Position2D.Zero());
+  public Card(SUITS suit, VALUES value, boolean faceUp) {
+    this(suit, value, faceUp, Position2D.Zero());
   }
 
   /**
@@ -108,15 +102,14 @@ public class Card extends Entity {
    * 
    * @param suit The suit of the card (e.g., Clubs, Diamonds, Hearts, or Spades).
    * @param value The value of the card (e.g., Ace, Two, Three, ..., King).
-   * @param faceUP A boolean indicating whether the card is face up (true) or face down (false).
+   * @param faceUp A boolean indicating whether the card is face up (true) or face down (false).
    * @param position The position of the card on the game board.
    */
-  public Card(SUITS suit, VALUES value, boolean faceUP, Position2D position) {
+  public Card(SUITS suit, VALUES value, boolean faceUp, Position2D position) {
     super(position, WIDTH, HEIGHT);
     this.suit = suit;
     this.value = value;
-    this.faceUP = faceUP;
-    this.selected = false;
+    this.faceUp = faceUp;
   }
 
   /**
@@ -142,17 +135,17 @@ public class Card extends Entity {
    *
    * @return {@code true} if the card is face up, {@code false} if it is face down.
    */
-  public boolean isFaceUP() {
-    return faceUP;
+  public boolean isFaceUp() {
+    return faceUp;
   }
 
   /**
    * Sets the face orientation of the card.
    *
-   * @param faceUP {@code true} to set the card as face up (visible), {@code false} to set it as face down (hidden).
+   * @param faceUp {@code true} to set the card as face up (visible), {@code false} to set it as face down (hidden).
    */
-  public void setFaceUP(boolean faceUP) {
-    this.faceUP = faceUP;
+  public void setFaceUp(boolean faceUp) {
+    this.faceUp = faceUp;
   }
 
   /**
@@ -166,19 +159,19 @@ public class Card extends Entity {
     if (isSelected()) {
       gc.setColor(Color.GREEN);
       gc.setStroke(new BasicStroke(2));
-      gc.drawRect(getPosition().getXpos()-1, getPosition().getYpos()-1, WIDTH+2, HEIGHT+2);
+      gc.drawRect(getPosition().getX()-1, getPosition().getY()-1, WIDTH+2, HEIGHT+2);
     } else {
       gc.setColor(Color.BLACK);
       gc.setStroke(new BasicStroke(1));
-      gc.drawRect(getPosition().getXpos()-1, getPosition().getYpos()-1, WIDTH+1, HEIGHT+1);
+      gc.drawRect(getPosition().getX()-1, getPosition().getY()-1, WIDTH+1, HEIGHT+1);
     }
     // Draw the card contents
-    if (!isFaceUP()) {
+    if (!isFaceUp()) {
       gc.setColor(Color.blue);
-      gc.fillRect(getPosition().getXpos(), getPosition().getYpos(), WIDTH, HEIGHT);
+      gc.fillRect(getPosition().getX(), getPosition().getY(), WIDTH, HEIGHT);
     } else {
       gc.setColor(Color.white);
-      gc.fillRect(getPosition().getXpos(), getPosition().getYpos(), WIDTH, HEIGHT);
+      gc.fillRect(getPosition().getX(), getPosition().getY(), WIDTH, HEIGHT);
       // Set the color of the card based on its suit
       if (suit == SUITS.DIAMONDS || suit == SUITS.HEARTS) {
         gc.setColor(Color.red);
@@ -186,8 +179,8 @@ public class Card extends Entity {
         gc.setColor(Color.black);
       }
       // Draw the suit and value of the card
-      gc.drawString(value.label, getPosition().getXpos() + 5, getPosition().getYpos() + 15);
-      gc.drawString(suit.label, getPosition().getXpos() + 5, getPosition().getYpos() + 30);
+      gc.drawString(value.label, getPosition().getX() + 5, getPosition().getY() + 15);
+      gc.drawString(suit.label, getPosition().getX() + 5, getPosition().getY() + 30);
     }
   }
 
