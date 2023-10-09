@@ -1,6 +1,6 @@
 package com.cst8334.solitaire.utils;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  * The {@code Entity} class represents objects that can be drawn on a graphics context and selected.
@@ -90,7 +90,7 @@ public class Entity implements Drawable, Selectable {
   }
 
   @Override
-  public void draw(Graphics gc) {
+  public void draw(Graphics2D gc) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'draw'");
   }
