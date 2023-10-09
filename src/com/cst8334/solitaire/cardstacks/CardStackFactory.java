@@ -1,4 +1,5 @@
 package com.cst8334.solitaire.cardstacks;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -55,7 +56,4 @@ public class CardStackFactory {
         return null;
     }
   }
-
 }
-
-

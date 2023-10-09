@@ -1,5 +1,6 @@
 package com.cst8334.solitaire.cards;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import com.cst8334.solitaire.utils.Drawable;
@@ -17,18 +18,36 @@ import com.cst8334.solitaire.utils.Entity;
  */
 public class Card extends Entity implements Drawable {
 
+  private static final int WIDTH = 50;
+  private static final int HEIGHT = 75;
+
   /**
    * An enumeration representing the suits of a playing card.
    */
   public static enum SUITS {
-    CLUBS, DIAMONDS, HEARTS, SPADES
+    CLUBS("♣"), DIAMONDS("♦"), HEARTS("♥"), SPADES("♠");
+
+    public final String label;
+
+    private SUITS(String label) {
+      this.label = label;
+    }
   }
 
   /**
    * An enumeration representing the values of a playing card.
    */
   public static enum VALUES {
-    ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING
+    ACE("A"), TWO("2"), THREE("3"), 
+    FOUR("4"), FIVE("5"), SIX("6"), 
+    SEVEN("7"), EIGHT("8"), NINE("9"), 
+    TEN("10"), JACK("J"), QUEEN("Q"), KING("K");
+
+    public final String label;
+
+    private VALUES(String label) {
+      this.label = label;
+    }
   }
 
   /**
@@ -47,6 +66,16 @@ public class Card extends Entity implements Drawable {
   private boolean faceUP;
 
   /**
+   * Constructs a new playing card with the specified suit and value. By default, the card is face down.
+   *
+   * @param suit  The suit of the card (e.g., Clubs, Diamonds, Hearts, or Spades).
+   * @param value The value of the card (e.g., Ace, Two, Three, ..., King).
+   */
+  public Card(SUITS suit, VALUES value) {
+    this(suit, value, false);
+  }
+
+  /**
    * Constructs a new playing card with the specified suit, value, and face orientation.
    *
    * @param suit   The suit of the card (e.g., Clubs, Diamonds, Hearts, or Spades).
@@ -56,7 +85,7 @@ public class Card extends Entity implements Drawable {
   public Card(SUITS suit, VALUES value, boolean faceUP) {
     this.suit = suit;
     this.value = value;
-    this.faceUP = false;
+    this.faceUP = faceUP;
   }
 
   /**
@@ -103,6 +132,26 @@ public class Card extends Entity implements Drawable {
   @Override
   public void draw(Graphics gc) {
     // TODO - Flush this out once Entity and Position2D are implemented
-    gc.drawRect(getPosition().getXpos(), getPosition().getYpos(), getWidth(), getHeight());
+    if (!isFaceUP()) {
+      gc.setColor(Color.blue);
+      gc.fillRect(getPosition().getX(), getPosition().getY(), WIDTH, HEIGHT);
+    } else {
+      gc.setColor(Color.white);
+      gc.fillRect(getPosition().getX(), getPosition().getY(), WIDTH, HEIGHT);
+      gc.setColor(Color.black);
+      gc.drawRect(getPosition().getX(), getPosition().getY(), WIDTH, HEIGHT);
+      gc.drawString(value.label, getPosition().getX() + 5, getPosition().getY() + 15);
+      gc.drawString(suit.label, getPosition().getX() + 5, getPosition().getY() + 30);
+    }
+  }
+
+  /**
+   * Returns a string representation of the card, including its value and suit.
+   *
+   * @return The card's value and suit as a string (e.g., "A♠" for Ace of Spades).
+   */
+  @Override
+  public String toString() {
+    return String.format("%s%s", value.label, suit.label);
   }
 }
