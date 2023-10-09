@@ -24,6 +24,9 @@ public class Card extends Entity {
   private static final int WIDTH = 50;
   private static final int HEIGHT = 75;
 
+  private static final int WIDTH = 50;
+  private static final int HEIGHT = 75;
+
   /**
    * An enumeration representing the suits of a playing card.
    */
@@ -197,5 +200,4 @@ public class Card extends Entity {
   public String toString() {
     return String.format("%s%s", value.label, suit.label);
   }
-
 }
