@@ -131,6 +131,6 @@ public class CardStack extends Entity implements Drawable {
   @Override
   public void draw(Graphics gc) {
     // TODO - Flush this out once Entity and Position2D are implemented
-    gc.drawRect(getPosition().getXpos(), getPosition().getYpos(), getWidth(), getHeight());
+    gc.drawRect(getPosition().getXPos(), getPosition().getYPos(), getWidth(), getHeight());
   }
 }
