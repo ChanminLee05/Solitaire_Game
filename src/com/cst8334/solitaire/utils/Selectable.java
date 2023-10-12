@@ -22,5 +22,22 @@ public interface Selectable {
    */
   public boolean isSelected();
 
+    /** Gets if a user clicked on the position of an entity
+   *
+   * @param position returns true if the position selected is assigned to an entity
+   * @return
+   */
+  public boolean contains (Position2D position);
+  
+  
+  /** Gets if a user selects a cardinal point where an entity is situated
+   * 
+   * @param x
+   * @param y
+   * @return
+   */
+  
+  public boolean contains (int x, int y);
+
 
 }
