@@ -4,12 +4,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import com.cst8334.solitaire.utils.Drawable;
+import com.cst8334.solitaire.utils.Selectable;
+import com.cst8334.solitaire.utils.SolitaireGameMouseListener;
 
 /**
  * The {@code SolitaireGame} class represents the main game interface for a Solitaire game.
@@ -50,6 +53,7 @@ public class SolitaireGame extends JPanel implements ActionListener {
   public SolitaireGame() {
     state = SolitaireState.initialState();
     Timer renderTimer = new Timer(1000 / 60, this);
+    addMouseListener(new SolitaireGameMouseListener(this::handleMouseClick));
     renderTimer.start();
   }
 
@@ -95,6 +99,20 @@ public class SolitaireGame extends JPanel implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
     repaint();
+  }
+
+  private void handleMouseClick(MouseEvent ev) {
+    for (Selectable selectable : state.getStacks()) {
+      if (selectable == null) continue;
+      if (!selectable.contains(ev)) continue;
+      if (state.getSelectedStack() == null) {
+        state.setSelectedStack((CardStack) selectable);
+        selectable.setSelected(true);
+      } else {
+        state.getSelectedStack().setSelected(false);
+        state.setSelectedStack(null);
+      }
+    }
   }
 
 }
