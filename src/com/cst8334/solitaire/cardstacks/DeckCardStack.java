@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.cst8334.solitaire.cards.Card;
+import com.cst8334.solitaire.cards.CardBuilder;
 import com.cst8334.solitaire.cards.Card.SUITS;
 import com.cst8334.solitaire.cards.Card.VALUES;
 
@@ -35,31 +36,30 @@ public class DeckCardStack extends CardStack {
     }
   }
 
- 
-/**
- * creates a deck of cards using the CardBuilder class
- * @param position from position2D (sets the position of the deck)
- * @return the list of cards created as the deck of cards
- */
+  /**
+   * creates a deck of cards using the CardBuilder class
+   * 
+   * @param position from position2D (sets the position of the deck)
+   * @return the list of cards created as the deck of cards
+   */
   private static List<Card> initializeDeckOfCards(Position2D position) {
-	    ArrayList<Card> cards = new ArrayList<>();
+    ArrayList<Card> cards = new ArrayList<>();
 
-	    for (SUITS suit : SUITS.values()) {
-	        for (VALUES rank : VALUES.values()) {
-	            Card card = new CardBuilder()
-	                    .setSuit(suit)
-	                    .setValue(rank)
-	                    .setPosition(position)
-	                    .setFaceUP(false) // Set the default face orientation (down)
-	                    .createCard();
+    for (SUITS suit : SUITS.values()) {
+      for (VALUES rank : VALUES.values()) {
+        Card card = new CardBuilder()
+            .setSuit(suit)
+            .setValue(rank)
+            .setPosition(position)
+            .setFaceUP(false) // Set the default face orientation (down)
+            .createCard();
 
-	            cards.add(card);
-	        }
-	    }
+        cards.add(card);
+      }
+    }
 
-	    return cards;
-	}
-
+    return cards;
+  }
 
   /**
    * Remove and return the top card from the deck.
@@ -69,7 +69,7 @@ public class DeckCardStack extends CardStack {
   @Override
   public Card pop() {
     Card topCard = super.pop();
-    if (!isEmpty()) 
+    if (!isEmpty())
       getLast().setFaceUp(true);
     return topCard;
   }

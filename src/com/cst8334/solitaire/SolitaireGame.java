@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import com.cst8334.solitaire.cardstacks.CardStack;
 import com.cst8334.solitaire.utils.Drawable;
 import com.cst8334.solitaire.utils.Selectable;
 import com.cst8334.solitaire.utils.SolitaireGameMouseListener;

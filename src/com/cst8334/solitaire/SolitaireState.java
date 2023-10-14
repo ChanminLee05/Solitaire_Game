@@ -39,6 +39,11 @@ public class SolitaireState {
   private List<CardStack> stacks;
 
   /**
+   * The selected card stack.
+   */
+  private CardStack selectedStack;
+
+  /**
    * Private constructor to prevent direct instantiation of the class.
    */
   private SolitaireState() { }
@@ -90,6 +95,22 @@ public class SolitaireState {
    */
   public List<CardStack> getStacks() {
     return stacks;
+  }
+
+  /**
+   * Sets the selected card stack
+   * @param cardStack The card stack to set as selected.
+   */
+  public void setSelectedStack(CardStack cardStack) {
+    selectedStack = cardStack;
+  }
+
+  /**
+   * Gets the selected card stack.
+   * @return The selected card stack.
+   */
+  public CardStack getSelectedStack() {
+    return selectedStack;
   }
 
   /**
