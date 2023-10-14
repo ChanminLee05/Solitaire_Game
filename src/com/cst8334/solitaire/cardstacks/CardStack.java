@@ -110,6 +110,7 @@ public class CardStack extends Entity {
    * @return The card at the bottom of the stack.
    */
   public Card getLast() {
+    if (cards.isEmpty()) return null; // Null check (empty stack)
     return cards.get(cards.size() - 1);
   }
 

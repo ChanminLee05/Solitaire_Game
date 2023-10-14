@@ -68,12 +68,9 @@ public class DeckCardStack extends CardStack {
    */
   @Override
   public Card pop() {
-    if (!isEmpty()) {
-      Card topCard = getCards().remove(getCards().size() - 1);
+    Card topCard = super.pop();
+    if (!isEmpty()) 
       getLast().setFaceUp(true);
-      return topCard;
-    } else {
-      return null; // Deck is empty
-    }
+    return topCard;
   }
 }
