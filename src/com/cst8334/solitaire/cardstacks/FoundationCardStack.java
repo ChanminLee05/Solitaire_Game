@@ -10,11 +10,13 @@ import com.cst8334.solitaire.utils.Position2D;
  * It extends the {@code CardStack} class and includes additional methods for managing foundation cards.
  * 
  * @see com.cst8334.solitaire.cardstacks.CardStack
- * @version 1.0
+ * @version 1.1
  * @since 17
  * @author Austin Kirby
  */
 public class FoundationCardStack extends CardStack {
+
+  private Card.SUITS suit;
 
   /**
    * Constructs an empty foundation pile.
@@ -40,6 +42,29 @@ public class FoundationCardStack extends CardStack {
    */
   public FoundationCardStack(List<Card> cards, Position2D position) {
     super(cards, position);
+  }
+
+  public Card.SUITS getSuit() {
+    return suit;
+  }
+
+  @Override
+  public void push(Card card) throws IllegalArgumentException {
+    if (suit == null) {
+      suit = card.getSuit();
+    }
+    if (card.getSuit() != suit) {
+      throw new IllegalArgumentException("Card must be of the same suit as the foundation pile.");
+    }
+    if (!isEmpty() && getLast().getValue().ordinal() + 1 != card.getValue().ordinal()) {
+      throw new IllegalArgumentException("Card must be one rank higher than the last card in the foundation pile.");
+    }
+    super.push(card);
+  }
+
+  @Override
+  public Card pop() throws UnsupportedOperationException {
+    throw new UnsupportedOperationException("Cannot pop cards from a foundation pile.");
   }
 
 }
