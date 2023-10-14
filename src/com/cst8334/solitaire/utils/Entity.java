@@ -18,6 +18,7 @@ public class Entity implements Drawable, Selectable {
   private int width;
   private int height;
   private boolean selected;
+    private Point mouseOffset = new Point(0, 0);
 
   /**
    * Constructs a new instance of the {@code Entity} class with the specified position, width, and height.
@@ -104,4 +105,31 @@ public class Entity implements Drawable, Selectable {
   public void setSelected(boolean selected) {
     this.selected = selected;
   }
+  
+@Override
+public boolean contains(MouseEvent mouse) {
+
+	/**
+	 * get position of mouse
+	 */
+	Point pos = mouse.getLocationOnScreen();
+	pos.x = mouse.getLocationOnScreen().x - pos.x - mouseOffset.x;
+	pos.y = mouse.getLocationOnScreen().y - pos.y - mouseOffset.y;
+	
+	/**
+	 * get position of entity
+	 */
+	int cardX = position.getX(); 
+    int cardY = position.getY(); 
+    int cardWidth = getWidth();        
+    int cardHeight = getHeight();    
+    
+    boolean isInsideCard = pos.x >= cardX && pos.x <= cardX + cardWidth && pos.y >= cardY && pos.y <= cardY + cardHeight;
+    
+ 
+    
+    return isInsideCard;
+ 	
+	
+}
 }
