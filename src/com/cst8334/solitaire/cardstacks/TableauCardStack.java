@@ -16,6 +16,10 @@ public class TableauCardStack extends CardStack {
 
   public TableauCardStack(List<Card> cards, Position2D position) {
     super(cards, position);
+    for (int i = 0; i < getCards().size(); i++) {
+      int yPos = getPosition().getY() + i * 25;
+      getCards().get(i).setPosition(new Position2D(getPosition().getX(), yPos));
+    }
   }
 
   @Override

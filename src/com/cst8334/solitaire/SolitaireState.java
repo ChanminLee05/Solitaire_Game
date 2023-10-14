@@ -104,26 +104,29 @@ public class SolitaireState {
     for (int i = 0; i < 4; i++) {
       stacks.add(CardStackFactory.createCardStack(TYPES.FOUNDATION, new Position2D(10 + (i * 100), 10)));
     }
+    // Deal initial cards for the tableau stacks
+    List<List<Card>> cards = dealInitialCards(stacks.get(0));
     for (int i = 0; i < 7; i++) {
-      stacks.add(CardStackFactory.createCardStack(TYPES.TABLEAU, new Position2D(10 + (i * 85), 150)));
+      stacks.add(CardStackFactory.createCardStack(TYPES.TABLEAU, cards.get(i), new Position2D(10 + (i * 85), 150)));
     }
-    return dealInitialCards(stacks);
+    return stacks;
   }
 
   /**
    * Deals the initial cards to the card stacks from the DeckCardStack.
-   * @param stacks The list of card stacks from the initial game board setup.
+   * @param deck The deck of cards to deal from.
    * @return The list of card stacks with the initial cards dealt.
    */
-  private static List<CardStack> dealInitialCards(List<CardStack> stacks) {
-    CardStack deck = stacks.get(0);
-    for (int i = 0; i <= 7; i++) {
-      CardStack tableau = stacks.get(5 + i);
-      for (int j = 0; j < i; j++) {
+  private static List<List<Card>> dealInitialCards(CardStack deck) {
+    List<List<Card>> stacks = new ArrayList<List<Card>>();
+    for (int i = 0; i < 7; i++) {
+      ArrayList<Card> stack = new ArrayList<Card>();
+      for (int j = 0; j <= i; j++) {
         Card card = deck.pop();
-        card.setFaceUp(i == j + 1);
-        tableau.push(card);
+        card.setFaceUp(i == j);
+        stack.add(card);
       }
+      stacks.add(stack);
     }
     return stacks;
   }
