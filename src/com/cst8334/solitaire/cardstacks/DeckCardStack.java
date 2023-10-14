@@ -35,24 +35,31 @@ public class DeckCardStack extends CardStack {
     }
   }
 
-  /**
-   * Initializes and returns a deck of cards at the specified position.
-   *
-   * @param position The position to initialize the deck.
-   * @return A list of initialized cards.
-   */
+ 
+/**
+ * creates a deck of cards using the CardBuilder class
+ * @param position from position2D (sets the position of the deck)
+ * @return the list of cards created as the deck of cards
+ */
   private static List<Card> initializeDeckOfCards(Position2D position) {
-    ArrayList<Card> cards = new ArrayList<>();
+	    ArrayList<Card> cards = new ArrayList<>();
 
-    for (SUITS suit : SUITS.values()) {
-      for (VALUES rank : VALUES.values()) {
-        Card card = new Card(suit, rank, position);
-        cards.add(card);
-      }
-    }
+	    for (SUITS suit : SUITS.values()) {
+	        for (VALUES rank : VALUES.values()) {
+	            Card card = new CardBuilder()
+	                    .setSuit(suit)
+	                    .setValue(rank)
+	                    .setPosition(position)
+	                    .setFaceUP(false) // Set the default face orientation (down)
+	                    .createCard();
 
-    return cards;
-  }
+	            cards.add(card);
+	        }
+	    }
+
+	    return cards;
+	}
+
 
   /**
    * Remove and return the top card from the deck.
