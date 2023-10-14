@@ -1,5 +1,6 @@
 package com.cst8334.solitaire.cardstacks;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -163,8 +164,15 @@ public class CardStack extends Entity {
    */
   @Override
   public void draw(Graphics2D gc) {
-    gc.setColor(Color.BLACK);
-    gc.drawRect(getPosition().getX(), getPosition().getY(), getWidth(), getHeight());
+    if (isSelected()) {
+      gc.setColor(Color.GREEN);
+      gc.setStroke(new BasicStroke(2));
+      gc.drawRect(getPosition().getX() - 2, getPosition().getY() - 2, getWidth() + 4, getHeight() + 4);
+    } else {
+      gc.setColor(Color.BLACK);
+      gc.setStroke(new BasicStroke(1));
+      gc.drawRect(getPosition().getX(), getPosition().getY(), getWidth(), getHeight());
+    }
     for (Drawable drawable : getCards()) {
       if (drawable == null) continue;
       drawable.draw(gc);
