@@ -117,28 +117,20 @@ public class Entity implements Drawable, Selectable {
     this.selected = selected;
   }
 
-  @Override
+ @Override
   public boolean contains(MouseEvent mouse) {
 
-    /**
-     * get position of mouse
-     */
-    Point pos = mouse.getLocationOnScreen();
-    pos.x = mouse.getLocationOnScreen().x - pos.x - mouseOffset.x;
-    pos.y = mouse.getLocationOnScreen().y - pos.y - mouseOffset.y;
+	  int mouseX = mouse.getX(); // Get the X coordinate of the mouse relative to the component
+	    int mouseY = mouse.getY(); // Get the Y coordinate of the mouse relative to the component
 
-    /**
-     * get position of entity
-     */
-    int cardX = position.getX();
-    int cardY = position.getY();
-    int cardWidth = getWidth();
-    int cardHeight = getHeight();
+	    int cardX = position.getX();
+	    int cardY = position.getY();
+	    int cardWidth = getWidth();
+	    int cardHeight = getHeight();
 
-    boolean isInsideCard = pos.x >= cardX && pos.x <= cardX + cardWidth && pos.y >= cardY
-        && pos.y <= cardY + cardHeight;
+	    // Check if the mouse click is inside the entity's bounding box
+	    boolean isInsideCard = mouseX >= cardX && mouseX <= cardX + cardWidth && mouseY >= cardY && mouseY <= cardY + cardHeight;
 
-    return isInsideCard;
-
-  }
+	    return isInsideCard;
+	}
 }
