@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import com.cst8334.solitaire.cards.Card;
 import com.cst8334.solitaire.cardstacks.CardStack;
 import com.cst8334.solitaire.utils.Drawable;
 import com.cst8334.solitaire.utils.Selectable;
@@ -112,10 +113,19 @@ public class SolitaireGame extends JPanel implements ActionListener {
       if (state.getSelectedStack() == null) {
         state.setSelectedStack((CardStack) selectable);
         selectable.setSelected(true);
-      } else {
-        state.getSelectedStack().setSelected(false);
-        state.setSelectedStack(null);
+        return;
       }
+      Card card;
+      CardStack nextStack = (CardStack) selectable;
+      try {
+        card = state.getSelectedStack().getLast();
+        nextStack.push(card);
+        state.getSelectedStack().pop();
+      } catch (Exception e) {
+        System.out.println(e.getMessage());
+      }
+      state.getSelectedStack().setSelected(false);
+      state.setSelectedStack(null);
     }
   }
 
