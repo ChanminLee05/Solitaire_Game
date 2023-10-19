@@ -28,5 +28,21 @@ public class TableauCardStack extends CardStack {
     int yPos = getPosition().getY() + (getCards().size() - 1) * 25;
     card.setPosition(new Position2D(getPosition().getX(), yPos));
   }
-  
+	
+ @Override
+  public Card pop() {
+      // Check if there are cards in the stack
+      if (!isEmpty()) {
+          // Find the first face-down card and change it to face-up
+          for (Card card : getCards()) {
+              if (!card.isFaceUp()) {
+                  card.setFaceUp(true);
+                  break; // Stop after changing the first face-down card
+              }
+          }
+          return super.pop();
+      }
+      return null; // Return null if the stack is empty
+  }
 }
+
