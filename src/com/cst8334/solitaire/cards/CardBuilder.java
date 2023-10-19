@@ -74,6 +74,6 @@ public class CardBuilder {
   public Card createCard() throws IllegalStateException {
     if (position == null) this.position = Position2D.Zero();
     if (suit == null || value == null) throw new IllegalStateException("Suit and value must be set");
-    return new Card(suit, value, faceUP);
+    return new Card(suit, value, faceUP, position);
   }
 }
