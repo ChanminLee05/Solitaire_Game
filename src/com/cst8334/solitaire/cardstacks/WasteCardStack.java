@@ -42,18 +42,15 @@ public class WasteCardStack extends CardStack {
     super(cards, position);
   }
 
-  /**
-   * Overrides the pop method to flip the second last card face up before popping the last card.
-   *
-   * @return The last card in the waste pile.
-   */
-  @Override
+ @Override
   public Card pop() {
-    Card card = super.pop();
-    // Flip the second last card face up
-    getCards().get(getCards().size() - 2).setFaceUp(true);
+    List<Card> cards = getCards();
+    if (cards.size() >= 2) {
+      cards.get(cards.size() - 2).setFaceUp(true);
+    }
+
     // Return the last card
-    return card;
+    return super.pop();
   }
 
   /**
@@ -64,11 +61,14 @@ public class WasteCardStack extends CardStack {
    */
   @Override
   public void push(Card card) {
-    // Flip the second last card face down
-    getCards().get(getCards().size() - 2).setFaceUp(false);
+    List<Card> cards = getCards();
+    if (cards.size() >= 2) {
+      cards.get(cards.size() - 2).setFaceUp(false);
+    }
+    
     // Add the card and flip it face up
-    getCards().add(card);
     card.setFaceUp(true);
+    super.push(card);
   }
 
   /**
