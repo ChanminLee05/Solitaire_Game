@@ -33,6 +33,7 @@ public class DeckCardStack extends CardStack {
     super(cards, position);
     if (cards.isEmpty()) {
       setCards(initializeDeckOfCards(position));
+        shuffle();
     }
   }
 
@@ -73,4 +74,8 @@ public class DeckCardStack extends CardStack {
       getLast().setFaceUp(true);
     return topCard;
   }
+//shuffle the deck
+   public void shuffleDeck() {
+	    Collections.shuffle(getCards());
+	  }
 }
