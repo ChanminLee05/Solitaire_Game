@@ -62,6 +62,30 @@ public class TableauCardStack extends CardStack {
 	    int yPos = getPosition().getY() + (getCards().size() - 1) * 25;
 	    card.setPosition(new Position2D(getPosition().getX(), yPos));
   }
+
+	
+  @Override
+  public Card pop() {
+      // Check if there are cards in the stack
+      if (!isEmpty()) {
+          Card topCard = getLast();
+          
+          // Check if the top card is face-down
+          if (!topCard.isFaceUp()) {
+              topCard.setFaceUp(true); // Change the face-down card to face-up
+          }
+	      // Check if there is another card beneath the top card and change it to face-up automatically
+          if (getCards().size() > 1) {
+              Card nextCard = getCards().get(getCards().size() - 2);
+              if (!nextCard.isFaceUp()) {
+                  nextCard.setFaceUp(true);
+              }
+          }
+          
+          return super.pop();
+      }
+      return null; // Return null if the stack is empty
+  }
   
   @Override
   public void setSelected(boolean selected) {
@@ -76,3 +100,5 @@ public class TableauCardStack extends CardStack {
 	  }
   }
 }
+
+
