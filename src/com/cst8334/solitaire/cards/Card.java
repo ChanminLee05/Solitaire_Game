@@ -2,6 +2,7 @@ package com.cst8334.solitaire.cards;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 
 import com.cst8334.solitaire.utils.Entity;
@@ -179,8 +180,8 @@ public class Card extends Entity {
         gc.setColor(Color.black);
       }
       // Draw the suit and value of the card
-      gc.drawString(value.label, getPosition().getX() + 5, getPosition().getY() + 15);
-      gc.drawString(suit.label, getPosition().getX() + 5, getPosition().getY() + 30);
+      gc.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 16));
+      gc.drawString(toString(), getPosition().getX() + 5, getPosition().getY() + 15);
     }
   }
 
