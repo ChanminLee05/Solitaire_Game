@@ -1,6 +1,7 @@
 package com.cst8334.solitaire;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -88,6 +89,9 @@ public class SolitaireGame extends JPanel implements ActionListener {
     // Draw the background
     gc.setColor(Color.WHITE);
     gc.fillRect(0, 0, getWidth(), getHeight());
+    gc.setColor(Color.black);
+    gc.setFont(new Font("Arial", Font.PLAIN, 16));
+    gc.drawString("Score: " + state.getScore(), 20, 550);
     // Iterate through the drawable objects in the game state and draw them
     for (Drawable drawable : state.getStacks()) {
       if (drawable == null) continue;
