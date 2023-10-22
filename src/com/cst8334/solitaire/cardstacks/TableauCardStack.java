@@ -8,6 +8,7 @@ import com.cst8334.solitaire.cards.Card.VALUES;
 import com.cst8334.solitaire.utils.Position2D;
 
 public class TableauCardStack extends CardStack {
+	
 	public TableauCardStack() {
 		
 	}
@@ -26,9 +27,6 @@ public class TableauCardStack extends CardStack {
 
   @Override
   public void push(Card card) {
-    super.push(card);
-    int yPos = getPosition().getY() + (getCards().size() - 1) * 25;
-    card.setPosition(new Position2D(getPosition().getX(), yPos));
     
     if(card == null) return;
 
@@ -40,35 +38,29 @@ public class TableauCardStack extends CardStack {
 	if (isEmpty()) {
 		if (card.getValue() == VALUES.KING) {
 			super.push(card);
+			card.setFaceUp(true);
 		} else {
 			throw new IllegalArgumentException("Only King card can be placed when there is no card on stack");
 		}
 	} else {
-		Card bottomCard = getFirst();
+		Card topCard = getLast();
 
-		int bottomCardValue = bottomCard.getValue().ordinal();
-        int newCardValue = card.getValue().ordinal();
-
-        if ((bottomCard.getSuit() == SUITS.HEARTS || bottomCard.getSuit() == SUITS.DIAMONDS)) {
-			if (card.getSuit() == SUITS.CLUBS || card.getSuit() == SUITS.SPADES) {
-				if (newCardValue - 1 == bottomCardValue) {
-					super.push(card);
-				}
-			}
-        }
-	}
-  }
-  
-  @Override
-  public void setSelected(boolean selected) {
-	  super.setSelected(selected);
-	  
-	// Update the selected state of all face-up cards in the stack
-      for (Card card : getCards()) {
-          if (card.isFaceUp()) {
-              card.setSelected(selected);
-          }
-      }
+	      if (topCard.isFaceUp() && topCard.getValue().ordinal() - 1 == card.getValue().ordinal()) {
+	    	  if ((topCard.getSuit() == SUITS.HEARTS || topCard.getSuit() == SUITS.DIAMONDS) &&
+	    			  (card.getSuit() == SUITS.CLUBS || card.getSuit() == SUITS.SPADES)) {
+	    		  		super.push(card);
+	    		  		card.setFaceUp(true);
+	    	  } else if ((topCard.getSuit() == SUITS.CLUBS || topCard.getSuit() == SUITS.SPADES) &&
+	    			  (card.getSuit() == SUITS.HEARTS || card.getSuit() == SUITS.DIAMONDS)) {
+	    		  		super.push(card);
+	    		  		card.setFaceUp(true);
+	    	  }
+	      } else {
+	    	  throw new IllegalArgumentException("Different color and suit, or 1 lower value card should be placed");
+	      }
+    }
+	    int yPos = getPosition().getY() + (getCards().size() - 1) * 25;
+	    card.setPosition(new Position2D(getPosition().getX(), yPos));
   }
   
 }
