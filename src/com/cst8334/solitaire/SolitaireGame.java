@@ -1,12 +1,17 @@
 package com.cst8334.solitaire;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -48,6 +53,11 @@ public class SolitaireGame extends JPanel implements ActionListener {
    * The current state of the Solitaire game.
    */
   private SolitaireState state;
+  
+  /**
+   * Button to start a new game. 
+   */
+  private JButton newGameButton;
 
   /**
    * Constructs a new instance of the Solitaire game.
@@ -58,6 +68,13 @@ public class SolitaireGame extends JPanel implements ActionListener {
     Timer renderTimer = new Timer(1000 / 60, this);
     addMouseListener(new SolitaireGameMouseListener(this::handleMouseClick));
     renderTimer.start();
+    // Create a "Restart Game" button
+    newGameButton = new JButton("Restart Game");
+    newGameButton.setFont(new Font("Calson", Font.BOLD,20));
+    newGameButton.setBackground(Color.LIGHT_GRAY);
+    newGameButton.setBorder(BorderFactory.createEtchedBorder());
+    newGameButton.setFocusable(false);
+    newGameButton.addActionListener(this);
   }
 
   /**
@@ -104,6 +121,9 @@ public class SolitaireGame extends JPanel implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
     repaint();
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    newGameButton.setAlignmentX(CENTER_ALIGNMENT);
+    add(newGameButton);
   }
 
   private void handleMouseClick(MouseEvent ev) {
