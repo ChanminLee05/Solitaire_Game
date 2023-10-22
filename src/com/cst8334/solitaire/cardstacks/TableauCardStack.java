@@ -63,4 +63,16 @@ public class TableauCardStack extends CardStack {
 	    card.setPosition(new Position2D(getPosition().getX(), yPos));
   }
   
+  @Override
+  public void setSelected(boolean selected) {
+	  super.setSelected(selected);
+	  
+	  if (!isEmpty()) {
+		  Card lastCard = getLast();
+		  
+		  if (!lastCard.isFaceUp()) {
+			  lastCard.setFaceUp(true);
+	      }
+	  }
+  }
 }
