@@ -50,21 +50,23 @@ public class FoundationCardStack extends CardStack {
 
   @Override
   public void push(Card card) throws IllegalArgumentException {
-    if (suit == null) {
-      suit = card.getSuit();
-    }
-    if (card.getSuit() != suit) {
-      throw new IllegalArgumentException("Card must be of the same suit as the foundation pile.");
-    }
-    if (!isEmpty() && getLast().getValue().ordinal() + 1 != card.getValue().ordinal()) {
-      throw new IllegalArgumentException("Card must be one rank higher than the last card in the foundation pile.");
-    }
-    super.push(card);
+      if (isEmpty()) {
+          // If the stack is empty, only an ACE can be pushed as the first card
+          if (card.getValue() == Card.VALUES.ACE) {
+              suit = card.getSuit();
+              super.push(card);
+          } else {
+              throw new IllegalArgumentException("Only an ACE can be pushed as the first card.");
+          }
+      } else {
+          // If the stack is not empty, the card must be of the same suit and one rank higher
+          if (suit != card.getSuit()) {
+              throw new IllegalArgumentException("Card must be of the same suit as the foundation pile.");
+          }
+          if (getLast().getValue().ordinal() + 1 != card.getValue().ordinal()) {
+              throw new IllegalArgumentException("Card must be one rank higher than the last card in the foundation pile.");
+          }
+          super.push(card);
+      }
   }
-
-  @Override
-  public Card pop() throws UnsupportedOperationException {
-    throw new UnsupportedOperationException("Cannot pop cards from a foundation pile.");
-  }
-
 }
