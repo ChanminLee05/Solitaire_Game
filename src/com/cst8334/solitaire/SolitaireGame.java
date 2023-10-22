@@ -13,6 +13,7 @@ import javax.swing.Timer;
 
 import com.cst8334.solitaire.cards.Card;
 import com.cst8334.solitaire.cardstacks.CardStack;
+import com.cst8334.solitaire.utils.CardMovementHandler;
 import com.cst8334.solitaire.utils.Drawable;
 import com.cst8334.solitaire.utils.Selectable;
 import com.cst8334.solitaire.utils.SolitaireGameMouseListener;
@@ -50,11 +51,17 @@ public class SolitaireGame extends JPanel implements ActionListener {
   private SolitaireState state;
 
   /**
+   * The card movement handler for the game.
+   */
+  private CardMovementHandler cardMovementHandler;
+
+  /**
    * Constructs a new instance of the Solitaire game.
    * Initializes the game state and sets up a timer for rendering.
    */
   public SolitaireGame() {
     state = SolitaireState.initialState();
+    cardMovementHandler = new CardMovementHandler();
     Timer renderTimer = new Timer(1000 / 60, this);
     addMouseListener(new SolitaireGameMouseListener(this::handleMouseClick));
     renderTimer.start();
@@ -115,12 +122,8 @@ public class SolitaireGame extends JPanel implements ActionListener {
         selectable.setSelected(true);
         return;
       }
-      Card card;
-      CardStack nextStack = (CardStack) selectable;
       try {
-        card = state.getSelectedStack().getLast();
-        nextStack.push(card);
-        state.getSelectedStack().pop();
+        cardMovementHandler.handleCardMovement(state, state.getSelectedStack(), (CardStack) selectable);
       } catch (Exception e) {
         System.out.println(e.getMessage());
       }
@@ -128,5 +131,4 @@ public class SolitaireGame extends JPanel implements ActionListener {
       state.setSelectedStack(null);
     }
   }
-
 }
