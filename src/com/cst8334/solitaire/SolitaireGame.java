@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -50,6 +53,11 @@ public class SolitaireGame extends JPanel implements ActionListener {
    * The current state of the Solitaire game.
    */
   private SolitaireState state;
+  
+  /**
+   * Button to start a new game. 
+   */
+  private JButton newGameButton;
 
   /**
    * The card movement handler for the game.
@@ -66,6 +74,14 @@ public class SolitaireGame extends JPanel implements ActionListener {
     Timer renderTimer = new Timer(1000 / 60, this);
     addMouseListener(new SolitaireGameMouseListener(this::handleMouseClick));
     renderTimer.start();
+    
+    // Create a "Restart Game" button
+    newGameButton = new JButton("Restart Game");
+    newGameButton.setFont(new Font("Calson", Font.BOLD,20));
+    newGameButton.setBackground(Color.LIGHT_GRAY);
+    newGameButton.setBorder(BorderFactory.createEtchedBorder());
+    newGameButton.setFocusable(false);
+    newGameButton.addActionListener(this);
   }
 
   /**
@@ -115,6 +131,13 @@ public class SolitaireGame extends JPanel implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
     repaint();
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    newGameButton.setAlignmentX(CENTER_ALIGNMENT);
+    add(newGameButton);
+    //Restart the game if click the button
+    if (e.getSource() == newGameButton) {
+    	state = SolitaireState.initialState();
+    }
   }
 
   private void handleMouseClick(MouseEvent ev) {

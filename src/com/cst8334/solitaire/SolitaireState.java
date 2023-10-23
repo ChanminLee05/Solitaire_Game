@@ -120,15 +120,15 @@ public class SolitaireState {
    */
   private static List<CardStack> createInitialCardStacks() {
     List<CardStack> stacks = new ArrayList<CardStack>();
-    stacks.add(CardStackFactory.createCardStack(TYPES.DECK, new Position2D(700, 10)));
-    stacks.add(CardStackFactory.createCardStack(TYPES.WASTE, new Position2D(600, 10)));
+    stacks.add(CardStackFactory.createCardStack(TYPES.DECK, new Position2D(700, 50)));
+    stacks.add(CardStackFactory.createCardStack(TYPES.WASTE, new Position2D(600, 50)));
     for (int i = 0; i < 4; i++) {
-      stacks.add(CardStackFactory.createCardStack(TYPES.FOUNDATION, new Position2D(10 + (i * 100), 10)));
+      stacks.add(CardStackFactory.createCardStack(TYPES.FOUNDATION, new Position2D(10 + (i * 100), 50)));
     }
     // Deal initial cards for the tableau stacks
     List<List<Card>> cards = dealInitialCards(stacks.get(0));
     for (int i = 0; i < 7; i++) {
-      stacks.add(CardStackFactory.createCardStack(TYPES.TABLEAU, cards.get(i), new Position2D(10 + (i * 85), 150)));
+      stacks.add(CardStackFactory.createCardStack(TYPES.TABLEAU, cards.get(i), new Position2D(10 + (i * 85), 200)));
     }
     return stacks;
   }
