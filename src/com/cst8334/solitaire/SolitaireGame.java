@@ -1,7 +1,6 @@
 package com.cst8334.solitaire;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -68,6 +67,7 @@ public class SolitaireGame extends JPanel implements ActionListener {
     Timer renderTimer = new Timer(1000 / 60, this);
     addMouseListener(new SolitaireGameMouseListener(this::handleMouseClick));
     renderTimer.start();
+    
     // Create a "Restart Game" button
     newGameButton = new JButton("Restart Game");
     newGameButton.setFont(new Font("Calson", Font.BOLD,20));
@@ -124,6 +124,10 @@ public class SolitaireGame extends JPanel implements ActionListener {
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     newGameButton.setAlignmentX(CENTER_ALIGNMENT);
     add(newGameButton);
+    //Restart the game if click the button
+    if (e.getSource() == newGameButton) {
+    	state = SolitaireState.initialState();
+    }
   }
 
   private void handleMouseClick(MouseEvent ev) {
