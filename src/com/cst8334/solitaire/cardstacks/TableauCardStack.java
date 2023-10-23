@@ -25,6 +25,33 @@ public class TableauCardStack extends CardStack {
     }
   }
 
+  /**
+   * Returns a list of face-up cards in the stack.
+   * @return A list of face-up cards in the stack.
+   */
+  public List<Card> getFaceUpCards() {
+    return getCards().stream().filter(Card::isFaceUp).toList();
+  }
+
+  public boolean canPush(Card card) {
+    if (isEmpty()) {
+      return card.getValue() == VALUES.KING;
+    }
+    Card topCard = getLast();
+    if (topCard.isFaceUp() && topCard.getValue().ordinal() - 1 != card.getValue().ordinal()) {
+      return false;
+    }
+    if ((topCard.getSuit() == SUITS.HEARTS || topCard.getSuit() == SUITS.DIAMONDS) &&
+        !(card.getSuit() == SUITS.CLUBS || card.getSuit() == SUITS.SPADES)) {
+      return false;
+    }
+    if ((topCard.getSuit() == SUITS.CLUBS || topCard.getSuit() == SUITS.SPADES) &&
+        !(card.getSuit() == SUITS.HEARTS || card.getSuit() == SUITS.DIAMONDS)) {
+      return false;
+    }
+    return true;
+  }
+
   @Override
   public void push(Card card) {
     
