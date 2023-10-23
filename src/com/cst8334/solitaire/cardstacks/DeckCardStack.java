@@ -71,7 +71,7 @@ public class DeckCardStack extends CardStack {
   public Card pop() {
     Card topCard = super.pop();
     if (!isEmpty())
-      getLast().setFaceUp(true);
+      getLast().setFaceUp(false);
     return topCard;
   }
 //shuffle the deck
