@@ -3,6 +3,7 @@ package com.cst8334.solitaire.cardstacks;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -155,6 +156,16 @@ public class CardStack extends Entity {
     List<Card> reversedCards = new ArrayList<Card>(cards);
     Collections.reverse(reversedCards);
     return new CardStack(reversedCards);
+  }
+
+  @Override
+  public boolean contains(MouseEvent ev) {
+    if (super.contains(ev)) return true;
+    for (Card card : cards) {
+      if (card == null) continue;
+      if (card.contains(ev)) return true;
+    }
+    return false;
   }
 
   /**
