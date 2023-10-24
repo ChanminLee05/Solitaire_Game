@@ -82,6 +82,7 @@ public class CardMovementHandler {
     while (!wasteStack.isEmpty()) {
       prevStack.push(wasteStack.pop());
     }
+    prevStack.getLast().setFaceUp(false);
   }
 
   private void handleDeckToWasteMovement(SolitaireState state, DeckCardStack prevStack, WasteCardStack nextStack) {
