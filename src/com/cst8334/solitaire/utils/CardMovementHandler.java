@@ -13,6 +13,7 @@ import com.cst8334.solitaire.cardstacks.WasteCardStack;
 public class CardMovementHandler {
   
   public void handleCardMovement(SolitaireState state, CardStack prevStack, CardStack nextStack) {
+    prevStack.getCards().forEach(card -> card.setSelected(false));
     if (prevStack instanceof DeckCardStack) {
       handleDeckMovement(state, (DeckCardStack) prevStack, nextStack);
     } else if (prevStack instanceof WasteCardStack) {
