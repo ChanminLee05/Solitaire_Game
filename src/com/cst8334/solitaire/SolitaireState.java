@@ -3,13 +3,13 @@ package com.cst8334.solitaire;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-
-import javax.swing.text.Position;
+import java.util.TimerTask;
 
 import com.cst8334.solitaire.cards.Card;
 import com.cst8334.solitaire.cardstacks.CardStack;
 import com.cst8334.solitaire.cardstacks.CardStackFactory;
 import com.cst8334.solitaire.cardstacks.CardStackFactory.TYPES;
+import com.cst8334.solitaire.utils.Callback;
 import com.cst8334.solitaire.utils.Position2D;
 
 /**
@@ -56,7 +56,7 @@ public class SolitaireState {
   public static SolitaireState initialState() {
     SolitaireState state = new SolitaireState();
     state.score = 0;
-    state.timer = new Timer();
+    state.timer = createGameTimer(() -> state.score -= 2);
     state.stacks = createInitialCardStacks();
     return state;
   }
@@ -131,6 +131,23 @@ public class SolitaireState {
       stacks.add(CardStackFactory.createCardStack(TYPES.TABLEAU, cards.get(i), new Position2D(10 + (i * 85), 200)));
     }
     return stacks;
+  }
+
+  /**
+   * Creates and returns a timer for the Solitaire game.
+   * 
+   * @param callback The callback to call when the timer fires.
+   * @return The timer for the Solitaire game.
+   */
+  private static Timer createGameTimer(Callback callback) {
+    Timer timer = new Timer();
+    timer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        callback.call();
+      }
+    }, 10000, 10000);
+    return timer;
   }
 
   /**
