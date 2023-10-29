@@ -33,4 +33,16 @@ public class Position2D {
   public String toString() {
     return "(" + point.x + ", " + point.y + ")";
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    Position2D other = (Position2D) obj;
+    return point.equals(other.point);
+  }
 }
