@@ -54,15 +54,15 @@ public class CardMovementHandler {
     handleDefaultMovement(state, prevStack, nextStack);
   }
 
+  //can only move deck cards to waste stack
   private void handleDeckMovement(SolitaireState state, DeckCardStack prevStack, CardStack nextStack) {
-    if (nextStack instanceof WasteCardStack) {
-      handleDeckToWasteMovement(state, prevStack, (WasteCardStack) nextStack);
-    } else if (nextStack instanceof DeckCardStack) {
-      handleDeckToDeckMovement(state, prevStack, (DeckCardStack) nextStack);
-    } else {
-      handleDefaultMovement(state, prevStack, nextStack);
-    }
-  }
+	  if (nextStack instanceof WasteCardStack) {
+	    handleDeckToWasteMovement(state, prevStack, (WasteCardStack) nextStack);
+	  } else {
+	    throw new IllegalArgumentException("Cannot move cards from the deck to a non-waste deck stack");
+	  }
+	}
+
 
   private void handleDefaultMovement(SolitaireState state, CardStack prevStack, CardStack nextStack) {
     if (nextStack instanceof DeckCardStack) {
