@@ -74,15 +74,18 @@ public class SolitaireGame extends JPanel implements ActionListener {
     Timer renderTimer = new Timer(1000 / 60, this);
     addMouseListener(new SolitaireGameMouseListener(this::handleMouseClick));
     renderTimer.start();
-    
+
+    //ensure that the button doesn't obscure game elements
     // Create a "Restart Game" button
     newGameButton = new JButton("Restart Game");
-    newGameButton.setFont(new Font("Calson", Font.BOLD,20));
+    newGameButton.setFont(new Font("Calson", Font.BOLD, 20));
     newGameButton.setBackground(Color.LIGHT_GRAY);
     newGameButton.setBorder(BorderFactory.createEtchedBorder());
     newGameButton.setFocusable(false);
     newGameButton.addActionListener(this);
-  }
+    newGameButton.setAlignmentX(CENTER_ALIGNMENT);
+    add(newGameButton);
+}
 
   /**
    * The main entry point for the Solitaire game.
