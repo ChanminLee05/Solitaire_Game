@@ -1,15 +1,26 @@
 package com.cst8334.solitaire;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import com.cst8334.solitaire.cards.Card;
+import com.cst8334.solitaire.cardstacks.CardStack;
+import com.cst8334.solitaire.utils.CardMovementHandler;
 import com.cst8334.solitaire.utils.Drawable;
+import com.cst8334.solitaire.utils.Selectable;
+import com.cst8334.solitaire.utils.SolitaireGameMouseListener;
 
 /**
  * The {@code SolitaireGame} class represents the main game interface for a Solitaire game.
@@ -42,6 +53,16 @@ public class SolitaireGame extends JPanel implements ActionListener {
    * The current state of the Solitaire game.
    */
   private SolitaireState state;
+  
+  /**
+   * Button to start a new game. 
+   */
+  private JButton newGameButton;
+
+  /**
+   * The card movement handler for the game.
+   */
+  private CardMovementHandler cardMovementHandler;
 
   /**
    * Constructs a new instance of the Solitaire game.
@@ -49,9 +70,22 @@ public class SolitaireGame extends JPanel implements ActionListener {
    */
   public SolitaireGame() {
     state = SolitaireState.initialState();
+    cardMovementHandler = new CardMovementHandler();
     Timer renderTimer = new Timer(1000 / 60, this);
+    addMouseListener(new SolitaireGameMouseListener(this::handleMouseClick));
     renderTimer.start();
-  }
+
+    //ensure that the button doesn't obscure game elements
+    // Create a "Restart Game" button
+    newGameButton = new JButton("Restart Game");
+    newGameButton.setFont(new Font("Calson", Font.BOLD, 20));
+    newGameButton.setBackground(Color.LIGHT_GRAY);
+    newGameButton.setBorder(BorderFactory.createEtchedBorder());
+    newGameButton.setFocusable(false);
+    newGameButton.addActionListener(this);
+    newGameButton.setAlignmentX(CENTER_ALIGNMENT);
+    add(newGameButton);
+}
 
   /**
    * The main entry point for the Solitaire game.
@@ -78,7 +112,12 @@ public class SolitaireGame extends JPanel implements ActionListener {
   @Override
   protected void paintComponent(Graphics gc) {
     super.paintComponents(gc);
-
+    // Draw the background
+    gc.setColor(Color.WHITE);
+    gc.fillRect(0, 0, getWidth(), getHeight());
+    gc.setColor(Color.black);
+    gc.setFont(new Font("Arial", Font.PLAIN, 16));
+    gc.drawString("Score: " + state.getScore(), 20, 550);
     // Iterate through the drawable objects in the game state and draw them
     for (Drawable drawable : state.getStacks()) {
       if (drawable == null) continue;
@@ -95,6 +134,31 @@ public class SolitaireGame extends JPanel implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
     repaint();
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    newGameButton.setAlignmentX(CENTER_ALIGNMENT);
+    add(newGameButton);
+    //Restart the game if click the button
+    if (e.getSource() == newGameButton) {
+    	state = SolitaireState.initialState();
+    }
   }
 
+  private void handleMouseClick(MouseEvent ev) {
+    for (Selectable selectable : state.getStacks()) {
+      if (selectable == null) continue;
+      if (!selectable.contains(ev)) continue;
+      if (state.getSelectedStack() == null) {
+        state.setSelectedStack((CardStack) selectable);
+        selectable.setSelected(true);
+        return;
+      }
+      try {
+        cardMovementHandler.handleCardMovement(state, state.getSelectedStack(), (CardStack) selectable);
+      } catch (Exception e) {
+        System.out.println(e.getMessage());
+      }
+      state.getSelectedStack().setSelected(false);
+      state.setSelectedStack(null);
+    }
+  }
 }

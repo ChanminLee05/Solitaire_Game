@@ -1,5 +1,7 @@
 package com.cst8334.solitaire.utils;
 
+import java.awt.event.MouseEvent;
+
 /**
  * The {@code Selectable} interface represents objects that can be selected.
  * Classes implementing this interface should provide implementations for the {@code setSelected} and {@code isSelected} methods.
@@ -22,5 +24,12 @@ public interface Selectable {
    */
   public boolean isSelected();
 
-
+ /** Gets if a user clicked on the position of an entity
+   *
+   * @param position returns true if the position selected is assigned to an entity
+   * @return
+   */
+  public boolean contains (MouseEvent mouse);
+  
+  
 }

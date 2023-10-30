@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.cst8334.solitaire.cards.Card;
+import com.cst8334.solitaire.cards.CardBuilder;
 import com.cst8334.solitaire.cards.Card.SUITS;
 import com.cst8334.solitaire.cards.Card.VALUES;
 
@@ -32,21 +33,28 @@ public class DeckCardStack extends CardStack {
     super(cards, position);
     if (cards.isEmpty()) {
       setCards(initializeDeckOfCards(position));
+        shuffle();
     }
   }
 
   /**
-   * Initializes and returns a deck of cards at the specified position.
-   *
-   * @param position The position to initialize the deck.
-   * @return A list of initialized cards.
+   * creates a deck of cards using the CardBuilder class
+   * 
+   * @param position from position2D (sets the position of the deck)
+   * @return the list of cards created as the deck of cards
    */
   private static List<Card> initializeDeckOfCards(Position2D position) {
     ArrayList<Card> cards = new ArrayList<>();
 
     for (SUITS suit : SUITS.values()) {
       for (VALUES rank : VALUES.values()) {
-        Card card = new Card(suit, rank, position);
+        Card card = new CardBuilder()
+            .setSuit(suit)
+            .setValue(rank)
+            .setPosition(position)
+            .setFaceUP(false) // Set the default face orientation (down)
+            .createCard();
+
         cards.add(card);
       }
     }
@@ -61,12 +69,13 @@ public class DeckCardStack extends CardStack {
    */
   @Override
   public Card pop() {
-    if (!isEmpty()) {
-      Card topCard = getCards().remove(getCards().size() - 1);
-      getLast().setFaceUp(true);
-      return topCard;
-    } else {
-      return null; // Deck is empty
-    }
+    Card topCard = super.pop();
+    if (!isEmpty())
+      getLast().setFaceUp(false);
+    return topCard;
   }
+//shuffle the deck
+   public void shuffleDeck() {
+	    Collections.shuffle(getCards());
+	  }
 }

@@ -1,9 +1,12 @@
 package com.cst8334.solitaire.utils;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
 
 /**
- * The {@code Entity} class represents objects that can be drawn on a graphics context and selected.
+ * The {@code Entity} class represents objects that can be drawn on a graphics
+ * context and selected.
  * It implements the {@code Drawable} and {@code Selectable} interfaces.
  * 
  * @see com.cst8334.solitaire.utils.Drawable
@@ -18,13 +21,15 @@ public class Entity implements Drawable, Selectable {
   private int width;
   private int height;
   private boolean selected;
+  private Point mouseOffset = new Point(0, 0);
 
   /**
-   * Constructs a new instance of the {@code Entity} class with the specified position, width, and height.
+   * Constructs a new instance of the {@code Entity} class with the specified
+   * position, width, and height.
    * 
    * @param position The position of the entity.
-   * @param width The width of the entity.
-   * @param height The height of the entity.
+   * @param width    The width of the entity.
+   * @param height   The height of the entity.
    */
   public Entity(Position2D position, int width, int height) {
     this.position = position;
@@ -32,9 +37,10 @@ public class Entity implements Drawable, Selectable {
     this.height = height;
     this.selected = false;
   }
-  
+
   /**
-   * Constructs a new instance of the {@code Entity} class with the specified position.
+   * Constructs a new instance of the {@code Entity} class with the specified
+   * position.
    * By default, the position, width and height are set to 0.
    */
   public Entity() {
@@ -43,6 +49,7 @@ public class Entity implements Drawable, Selectable {
 
   /**
    * Gets the position of the entity.
+   * 
    * @return The position of the entity.
    */
   public Position2D getPosition() {
@@ -51,6 +58,7 @@ public class Entity implements Drawable, Selectable {
 
   /**
    * Sets the position of the entity.
+   * 
    * @param position The position of the entity.
    */
   public void setPosition(Position2D position) {
@@ -59,6 +67,7 @@ public class Entity implements Drawable, Selectable {
 
   /**
    * Gets the width of the entity.
+   * 
    * @return The width of the entity.
    */
   public int getWidth() {
@@ -67,6 +76,7 @@ public class Entity implements Drawable, Selectable {
 
   /**
    * Sets the width of the entity.
+   * 
    * @param width The width of the entity.
    */
   public void setWidth(int width) {
@@ -75,6 +85,7 @@ public class Entity implements Drawable, Selectable {
 
   /**
    * Gets the height of the entity.
+   * 
    * @return The height of the entity.
    */
   public int getHeight() {
@@ -83,6 +94,7 @@ public class Entity implements Drawable, Selectable {
 
   /**
    * Sets the height of the entity.
+   * 
    * @param height The height of the entity.
    */
   public void setHeight(int height) {
@@ -104,4 +116,21 @@ public class Entity implements Drawable, Selectable {
   public void setSelected(boolean selected) {
     this.selected = selected;
   }
+
+ @Override
+  public boolean contains(MouseEvent mouse) {
+
+	  int mouseX = mouse.getX(); // Get the X coordinate of the mouse relative to the component
+	    int mouseY = mouse.getY(); // Get the Y coordinate of the mouse relative to the component
+
+	    int cardX = position.getX();
+	    int cardY = position.getY();
+	    int cardWidth = getWidth();
+	    int cardHeight = getHeight();
+
+	    // Check if the mouse click is inside the entity's bounding box
+	    boolean isInsideCard = mouseX >= cardX && mouseX <= cardX + cardWidth && mouseY >= cardY && mouseY <= cardY + cardHeight;
+
+	    return isInsideCard;
+	}
 }
