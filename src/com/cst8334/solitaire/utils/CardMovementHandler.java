@@ -51,6 +51,9 @@ public class CardMovementHandler {
   }
 
   private void handleWasteMovement(SolitaireState state, WasteCardStack prevStack, CardStack nextStack) {
+    if (nextStack instanceof WasteCardStack) {
+      throw new IllegalArgumentException("Cannot move cards from the waste to the waste");
+    }
     handleDefaultMovement(state, prevStack, nextStack);
   }
 
@@ -58,7 +61,9 @@ public class CardMovementHandler {
   private void handleDeckMovement(SolitaireState state, DeckCardStack prevStack, CardStack nextStack) {
 	  if (nextStack instanceof WasteCardStack) {
 	    handleDeckToWasteMovement(state, prevStack, (WasteCardStack) nextStack);
-	  } else {
+	  } else if (nextStack instanceof DeckCardStack) {
+      handleDeckToDeckMovement(state, prevStack, (DeckCardStack) nextStack);
+    } else {
 	    throw new IllegalArgumentException("Cannot move cards from the deck to a non-waste deck stack");
 	  }
 	}
@@ -88,9 +93,20 @@ public class CardMovementHandler {
 
   private void handleDeckToWasteMovement(SolitaireState state, DeckCardStack prevStack, WasteCardStack nextStack) {
     System.out.println("Deck to waste movement");
+    // center all cards in the waste stack
+    Position2D stackPosition = nextStack.getPosition();
+    nextStack.getCards().forEach(card -> card.setPosition(stackPosition));
+    // move the top ~3 cards from the deck to the waste stack
     int toMove = Math.min(2, prevStack.getCards().size());
-    for (; toMove > 0; toMove--) {
-      nextStack.push(prevStack.pop());
+    for (int i = 0; i <= toMove; i++) {
+      Card card = prevStack.pop();
+      card.setFaceUp(true);
+      // move the card to the left a bit
+      Position2D cardPosition = Position2D.Zero();
+      cardPosition.setY(stackPosition.getY());
+      cardPosition.setX(stackPosition.getX() + (35 * i));
+      nextStack.push(card);
+      card.setPosition(cardPosition);
     }
   }
 

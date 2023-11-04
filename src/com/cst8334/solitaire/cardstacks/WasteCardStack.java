@@ -54,7 +54,7 @@ public class WasteCardStack extends CardStack {
   }
 
   /**
-   * Overrides the push method to flip the second last card face down before adding a new card
+   * Overrides the push method to flip the third last card face down before adding a new card
    * and flipping it face up.
    *
    * @param card The card to push onto the waste pile.
@@ -62,8 +62,8 @@ public class WasteCardStack extends CardStack {
   @Override
   public void push(Card card) {
     List<Card> cards = getCards();
-    if (cards.size() >= 2) {
-      cards.get(cards.size() - 2).setFaceUp(false);
+    if (cards.size() >= 3) {
+      cards.get(cards.size() - 3).setFaceUp(false);
     }
     
     // Add the card and flip it face up

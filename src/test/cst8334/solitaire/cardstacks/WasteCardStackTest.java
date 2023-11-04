@@ -32,11 +32,14 @@ class WasteCardStackTest {
     WasteCardStack stack = new WasteCardStack();
     Card card1 = new Card(Card.SUITS.CLUBS, Card.VALUES.ACE);
     Card card2 = new Card(Card.SUITS.DIAMONDS, Card.VALUES.TWO);
+    Card card3 = new Card(Card.SUITS.CLUBS, Card.VALUES.THREE);
     stack.push(card1);
     stack.push(card2);
+    stack.push(card3);
 
     assertTrue(card1.isFaceUp(), "Second last card should be face up after pushing a new card");
     assertTrue(card2.isFaceUp(), "Last card should be face up after pushing a new card");
+    assertTrue(card3.isFaceUp(), "New card should be face up after pushing a new card");
   }
 
 }
