@@ -27,24 +27,29 @@ public class CardMovementHandler {
     }
   }
 
-  private void handleTableauMovement(SolitaireState state, TableauCardStack prevStack, CardStack nextStack) {
-    if (nextStack.getClass() == TableauCardStack.class) {
-      List<Card> faceUpCards = prevStack.getFaceUpCards();
-      int toRemove = 0;
-      for (Card card : faceUpCards) {
-        if (!((TableauCardStack) nextStack).canPush(card)) continue;
-        nextStack.push(card);
-        toRemove++;
-      }
-      for (int i = 0; i < toRemove; i++) {
-        prevStack.pop();
-      }
-      System.out.println(prevStack.getLast());
-      prevStack.getLast().setFaceUp(true);
-      return;
-    }
-    handleDefaultMovement(state, prevStack, nextStack);
-  }
+   private void handleTableauMovement(SolitaireState state, TableauCardStack prevStack, CardStack nextStack) {
+	    if (nextStack instanceof WasteCardStack) {
+	        throw new IllegalArgumentException("Cannot move cards from the tableau to the waste");
+	    }
+
+	    if (nextStack.getClass() == TableauCardStack.class) {
+	        List<Card> faceUpCards = prevStack.getFaceUpCards();
+	        int toRemove = 0;
+	        for (Card card : faceUpCards) {
+	            if (!((TableauCardStack) nextStack).canPush(card)) continue;
+	            nextStack.push(card);
+	            toRemove++;
+	        }
+	        for (int i = 0; i < toRemove; i++) {
+	            prevStack.pop();
+	        }
+	        System.out.println(prevStack.getLast());
+	        prevStack.getLast().setFaceUp(true);
+	        return;
+	    }
+	    handleDefaultMovement(state, prevStack, nextStack);
+	}
+
 
   private void handleFoundationMovement(SolitaireState state, FoundationCardStack prevStack, CardStack nextStack) {
     handleDefaultMovement(state, prevStack, nextStack);
