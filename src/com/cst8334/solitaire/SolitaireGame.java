@@ -214,9 +214,19 @@ public class SolitaireGame extends JPanel implements ActionListener {
           state = SolitaireState.initialState();
       } else if (e.getSource() == spiderSolitaireButton) {
           // Handle Spider Solitaire button click (change game settings)
+
+	 //when user clicks on Vegas Rules Solitaire button, another window pops open for vegas rules solitaire     
       } else if (e.getSource() == vegasSolitaireButton) {
-          // Handle Vegas Solitaire button click (change game settings)
+    	  JFrame VRwindow = new JFrame("Vegas Solitaire");
+    	  VRwindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    	  VRwindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    	  VRwindow.setLocationRelativeTo(null);
+    	  VegasRulesSolitaire game = new VegasRulesSolitaire();
+    	  VRwindow.add(game);
+
+    	  VRwindow.setVisible(true);
       }
+
 
       // Update the score label
       scoreValueLabel.setText(Integer.toString(state.getScore()));
