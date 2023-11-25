@@ -33,7 +33,7 @@ public class DeckCardStack extends CardStack {
     super(cards, position);
     if (cards.isEmpty()) {
       setCards(initializeDeckOfCards(position));
-        shuffle();
+      shuffle();
     }
   }
 
@@ -48,10 +48,11 @@ public class DeckCardStack extends CardStack {
 
     for (SUITS suit : SUITS.values()) {
       for (VALUES rank : VALUES.values()) {
+        Position2D paddedPosition = new Position2D(position.getX() + PADDING, position.getY() + PADDING);
         Card card = new CardBuilder()
             .setSuit(suit)
             .setValue(rank)
-            .setPosition(position)
+            .setPosition(paddedPosition)
             .setFaceUP(false) // Set the default face orientation (down)
             .createCard();
 
@@ -74,8 +75,9 @@ public class DeckCardStack extends CardStack {
       getLast().setFaceUp(false);
     return topCard;
   }
-//shuffle the deck
-   public void shuffleDeck() {
-	    Collections.shuffle(getCards());
-	  }
+  
+  //shuffle the deck
+  public void shuffleDeck() {
+    Collections.shuffle(getCards());
+  }
 }

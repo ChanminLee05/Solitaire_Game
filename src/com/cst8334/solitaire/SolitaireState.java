@@ -121,7 +121,7 @@ public class SolitaireState {
   private static List<CardStack> createInitialCardStacks() {
     List<CardStack> stacks = new ArrayList<CardStack>();
     stacks.add(CardStackFactory.createCardStack(TYPES.DECK, new Position2D(700, 50)));
-    stacks.add(CardStackFactory.createCardStack(TYPES.WASTE, new Position2D(560, 50)));
+    stacks.add(CardStackFactory.createCardStack(TYPES.WASTE, new Position2D(600, 50)));
     for (int i = 0; i < 4; i++) {
       stacks.add(CardStackFactory.createCardStack(TYPES.FOUNDATION, new Position2D(10 + (i * 100), 50)));
     }
