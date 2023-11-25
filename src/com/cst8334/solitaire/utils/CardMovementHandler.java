@@ -30,6 +30,8 @@ public class CardMovementHandler {
    private void handleTableauMovement(SolitaireState state, TableauCardStack prevStack, CardStack nextStack) {
 	    if (nextStack instanceof WasteCardStack) {
 	        throw new IllegalArgumentException("Cannot move cards from the tableau to the waste");
+	    } else if (nextStack instanceof FoundationCardStack) {
+        state.addScore(10);
 	    }
 
 	    if (nextStack.getClass() == TableauCardStack.class) {
@@ -45,6 +47,7 @@ public class CardMovementHandler {
 	        }
 	        System.out.println(prevStack.getLast());
 	        prevStack.getLast().setFaceUp(true);
+	        state.addScore(5);
 	        return;
 	    }
 	    handleDefaultMovement(state, prevStack, nextStack);
@@ -52,6 +55,11 @@ public class CardMovementHandler {
 
 
   private void handleFoundationMovement(SolitaireState state, FoundationCardStack prevStack, CardStack nextStack) {
+	  // if foundation stack card is moved back to tableau stack, it minuses 15 score
+	  if (nextStack instanceof TableauCardStack) {
+		  state.addScore(-15);
+	  }
+	  
     handleDefaultMovement(state, prevStack, nextStack);
   }
 
@@ -59,6 +67,13 @@ public class CardMovementHandler {
     if (nextStack instanceof WasteCardStack) {
       throw new IllegalArgumentException("Cannot move cards from the waste to the waste");
     }
+    
+    // moving card to tableau stack adds 5 score and 10 score to foundation stack
+    if (nextStack instanceof TableauCardStack) {
+		  state.addScore(5);
+	  } else if (nextStack instanceof FoundationCardStack) {
+		  state.addScore(10);
+	  }
     handleDefaultMovement(state, prevStack, nextStack);
   }
 
