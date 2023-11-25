@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import com.cst8334.solitaire.cardstacks.CardStack;
@@ -54,70 +55,68 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	   * The card movement handler for the game.
 	   */
 	  private CardMovementHandlerVegasRules cardMovementHandlerVR;
-	  
+  
 	  /*
 	   * New game button (restart)
 	   */
 
 	    private JButton newGameButton;
-	    
+
 	    /**
 	     *  Solitaire button (to go back)
 	     */
 	    private JButton OriginalSolitaireButton;
-	    
+
 	    /*
 	     * vegas Rules Solitaire button
 	     */
 	    private JButton FreeCellButton;
-	    
+
 	    /*
 	     * the score label
 	     */
 	    private JLabel scoreLabel;
-	    
+
 	    /*
 	     * label for the value of the score
 	     */
 	    private JLabel scoreValueLabel;
-	    
+
 	    // Vegas cumulative switch
 	    private JCheckBox drawThreeSwitch;
-	    
+
 	    // Vegas cumulative switch
 	    private JCheckBox vegasCumulativeSwitch;
-	    
-	    
+
 	    /**
 	     * Constructs a new instance of the Solitaire game.
 	     * Initializes the game state and sets up a timer for rendering.
 	     */
 	    public VegasRulesSolitaire() {
-	        state = VegasRulesState.initialState();
+	        state = VegasRulesState.initialState(false, 0);
+
 	        cardMovementHandlerVR = new CardMovementHandlerVegasRules();
 	        Timer renderTimer = new Timer(1000 / 60, this);
 	        addMouseListener(new SolitaireGameMouseListener(this::handleMouseClick));
 	        renderTimer.start();
-	        
-	        
 
 	        // Right panel setup
 	        JPanel rightPanel = new JPanel();
 	        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 	        rightPanel.setPreferredSize(new Dimension(200, WINDOW_HEIGHT));
 	        rightPanel.setBackground(Color.cyan);
-	        
+
 	        // Score components
 	        scoreLabel = new JLabel("Score:");
 	        scoreValueLabel = new JLabel("0");
 	        scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 	        scoreValueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-	        
+
 	        // Draw Three option switch
 	        drawThreeSwitch = new JCheckBox("Draw 3 option");
 	        drawThreeSwitch.setAlignmentX(Component.CENTER_ALIGNMENT);
 	        drawThreeSwitch.addActionListener(this);
-	        
+
 	        // Vegas cumulative switch
 	        vegasCumulativeSwitch = new JCheckBox("Vegas Cumulative");
 	        vegasCumulativeSwitch.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -180,7 +179,7 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	      window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	      window.setLocationRelativeTo(null);
 
-	      FreeCellSolitaire game = new FreeCellSolitaire();
+	      VegasRulesSolitaire game = new VegasRulesSolitaire();
 	      window.add(game);
 
 	      window.setVisible(true);
@@ -212,9 +211,17 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	  @Override
 	  public void actionPerformed(ActionEvent e) {
 	      if (e.getSource() == newGameButton) {
-	          state = VegasRulesState.initialState();
+	    	  if (!state.isVegasCumulative()) {
+	              state.setScore(0);
+	          }
+	          state = VegasRulesState.initialState(state.isVegasCumulative(), state.getScore());
+	          
 	      } else if (e.getSource() == OriginalSolitaireButton) {
-	    	  //when user clicks on FreeCellButton, another window pops open of free cell solitaire
+	    	  //when user clicks on Klondlike Solitaire button, it closes Vegas Rules Solitaire and opens Klondlike solitaire
+	          JFrame vegasRulesWindow = (JFrame) SwingUtilities.getWindowAncestor(this);
+	          vegasRulesWindow.dispose();
+	          // Open the Solitaire window
+
 	    	  JFrame window = new JFrame("Solitaire");
 	    	  window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	    	  window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -223,27 +230,26 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	    	  window.add(game);
 
 	    	  window.setVisible(true);
-	    	  
-	          
 	      } else if (e.getSource() == FreeCellButton) {
+	    	  //when user clicks on FreeCellButton, another window pops open of free cell solitaire
+
 	    	  JFrame FCwindow = new JFrame("Free Cell Solitaire");
 	    	  FCwindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	    	  FCwindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    	  FCwindow.setLocationRelativeTo(null);
-	    	  FreeCellSolitaire game = new FreeCellSolitaire();
+	    	  
+	    	  //This needs to be changed to FreeCell game once FreeCell class is created
+	    	  SolitaireGame game = new SolitaireGame();
 	    	  FCwindow.add(game);
 
 	    	  FCwindow.setVisible(true);
-	    	  
-	    	  
+
 	      } else if (e.getSource() == vegasCumulativeSwitch) {
 	            // Toggle the Vegas cumulative option based on the switch state
 	            state.setVegasCumulative(vegasCumulativeSwitch.isSelected());
-	      }
-	      
-	      else if (e.getSource() == drawThreeSwitch) {
+        } else if (e.getSource() == drawThreeSwitch) {
 	            // Toggle the Vegas cumulative option based on the switch state
-	            state.setVegasCumulative(drawThreeSwitch.isSelected());
+	            state.setDrawThreeOption(drawThreeSwitch.isSelected());
 	      }
 
 	      // Update the score label
@@ -252,7 +258,7 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	      // Update the UI, e.g., repaint or modify the labels
 	      repaint();
 	  }
-	  
+
 	  private void handleMouseClick(MouseEvent ev) {
 	    for (Selectable selectable : state.getStacks()) {
 	      if (selectable == null) continue;
@@ -272,3 +278,4 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	    }
 	  }
 	}
+

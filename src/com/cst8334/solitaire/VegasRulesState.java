@@ -32,14 +32,13 @@ public class VegasRulesState {
 	   * The selected card stack.
 	   */
 	  private CardStack selectedStack;
-	  
+
 	  //vegas cumulative switch boolean (to check if it is enabled or not)
 	  private boolean isVegasCumulative;
-	  
+
 	  //draw three option switch boolean (to check if it is enabled or not)
 	  private boolean drawThreeOption;
-	  
-	  
+
 
 	  /**
 	   * Private constructor to prevent direct instantiation of the class.
@@ -51,11 +50,12 @@ public class VegasRulesState {
 	   *
 	   * @return The initial Solitaire state with a score of -52, a timer, and initial card stacks.
 	   */
-	  public static VegasRulesState initialState() {
+	  public static VegasRulesState initialState(boolean isVegasCumulative, int currentScore) {
 	    VegasRulesState state = new VegasRulesState();
-	    state.score = -52;
+	    state.score = isVegasCumulative ? currentScore : -52;
 	    state.timer = createGameTimer(() -> state.score -= 0);
 	    state.stacks = createInitialCardStacks();
+	    state.isVegasCumulative = isVegasCumulative;
 	    return state;
 	  }
 
@@ -67,7 +67,7 @@ public class VegasRulesState {
 	  public int getScore() {
 	    return score;
 	  }
-	  
+
 	  public void setScore(int score) {
 	        this.score = score;
 	    }
@@ -84,7 +84,7 @@ public class VegasRulesState {
 	     * @param draw3Option Indicates whether the Draw 3 option is on.
 	     */
 	    public void updateScore(int scoreChange, boolean draw3Option) {
-	 
+
 	        // Update the score
 	        score += scoreChange;
 	    }
@@ -98,7 +98,6 @@ public class VegasRulesState {
 	    return timer;
 	  }
 
-	  
 	  /**
 	     * Sets the Vegas cumulative option.
 	     *
@@ -116,7 +115,7 @@ public class VegasRulesState {
 	    public boolean isVegasCumulative() {
 	        return isVegasCumulative;
 	    }
-	    
+
 	    public boolean isDrawThreeOption() {
 	        return drawThreeOption;
 	    }
@@ -206,5 +205,6 @@ public class VegasRulesState {
 	    return stacks;
 	  }
 
-	
+
+
 	}

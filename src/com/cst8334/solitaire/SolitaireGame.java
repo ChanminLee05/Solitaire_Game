@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import com.cst8334.solitaire.cardstacks.CardStack;
@@ -162,6 +163,7 @@ public class SolitaireGame extends JPanel implements ActionListener {
       // Add right panel to the right of the main panel
       add(leftPanel, BorderLayout.EAST);
   }
+  
 
   /**
    * The main entry point for the Solitaire game.
@@ -188,6 +190,12 @@ public class SolitaireGame extends JPanel implements ActionListener {
   @Override
   protected void paintComponent(Graphics gc) {
       super.paintComponent(gc);
+      
+      // Check if the state is null
+      if (state == null) {
+          return;
+      }
+      
       // Draw the background
       gc.setColor(Color.WHITE);
       gc.fillRect(0, 0, getWidth(), getHeight());
@@ -217,6 +225,10 @@ public class SolitaireGame extends JPanel implements ActionListener {
 
 	 //when user clicks on Vegas Rules Solitaire button, another window pops open for vegas rules solitaire     
       } else if (e.getSource() == vegasSolitaireButton) {
+    	  //when user clicks on Vegas Rules Solitaire button, it closes Klondlike game and opens Vegas rules solitaire
+		    JFrame vegasRulesWindow = (JFrame) SwingUtilities.getWindowAncestor(this);
+		    vegasRulesWindow.dispose();
+
     	  JFrame VRwindow = new JFrame("Vegas Solitaire");
     	  VRwindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     	  VRwindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

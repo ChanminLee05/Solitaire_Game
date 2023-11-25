@@ -28,7 +28,6 @@ public class CardMovementHandlerVegasRules {
 	    // Update the score based on the moved card
 	    int scoreChange = calculateScoreChange(prevStack, nextStack);
 	    state.updateScore(scoreChange, state.isVegasCumulative());
-    
 	  }
 
 	   private void handleTableauMovement(VegasRulesState state, TableauCardStack prevStack, CardStack nextStack) {
@@ -105,9 +104,11 @@ public class CardMovementHandlerVegasRules {
 	    // center all cards in the waste stack
 	    Position2D stackPosition = nextStack.getPosition();
 	    nextStack.getCards().forEach(card -> card.setPosition(stackPosition));
-	    // move the top ~3 cards from the deck to the waste stack
-	    int toMove = Math.min(2, prevStack.getCards().size());
-	    for (int i = 0; i <= toMove; i++) {
+
+	    // Determine how many cards to move based on the drawThreeSwitch checkbox
+	    int toMove = state.isDrawThreeOption() ? Math.min(3, prevStack.getCards().size()) : 1;
+	    for (int i = 0; i < toMove; i++) {
+
 	      Card card = prevStack.pop();
 	      card.setFaceUp(true);
 	      // move the card to the left a bit
@@ -135,4 +136,6 @@ public class CardMovementHandlerVegasRules {
 
 
 
+
 	}
+
