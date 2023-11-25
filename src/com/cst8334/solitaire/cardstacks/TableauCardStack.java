@@ -21,7 +21,7 @@ public class TableauCardStack extends CardStack {
     super(cards, position);
     for (int i = 0; i < getCards().size(); i++) {
       int yPos = getPosition().getY() + i * 25;
-      getCards().get(i).setPosition(new Position2D(getPosition().getX(), yPos));
+      getCards().get(i).setPosition(new Position2D(getPosition().getX() + PADDING, yPos + PADDING));
     }
   }
 
@@ -89,7 +89,7 @@ public class TableauCardStack extends CardStack {
       }
     }
     int yPos = getPosition().getY() + (getCards().size() - 1) * 25;
-    card.setPosition(new Position2D(getPosition().getX(), yPos));
+    card.setPosition(new Position2D(getPosition().getX() + PADDING, yPos + PADDING));
   }
 
   @Override

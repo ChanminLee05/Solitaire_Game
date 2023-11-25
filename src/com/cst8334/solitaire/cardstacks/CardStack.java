@@ -25,9 +25,12 @@ import com.cst8334.solitaire.utils.Position2D;
  */
 public class CardStack extends Entity {
 
-  private static final int WIDTH = 70;
+  private static final int WIDTH = 80;
+  private static final int HEIGHT = 115;
+  private static final int ARC_WIDTH = 5;
+  private static final int ARC_HEIGHT = 5;
 
-  private static final int HEIGHT = 90;
+  protected static final int PADDING = 5;
 
   /**
    * The list of cards in the stack.
@@ -123,7 +126,8 @@ public class CardStack extends Entity {
    */
   public void push(Card card) {
     if (card == null) return;
-    card.setPosition(getPosition());
+    Position2D paddedPosition = new Position2D(getPosition().getX() + PADDING, getPosition().getY() + PADDING);
+    card.setPosition(paddedPosition);
     cards.add(card);
   }
 
@@ -178,11 +182,11 @@ public class CardStack extends Entity {
     if (isSelected()) {
       gc.setColor(Color.GREEN);
       gc.setStroke(new BasicStroke(2));
-      gc.drawRect(getPosition().getX() - 2, getPosition().getY() - 2, getWidth() + 4, getHeight() + 4);
+      gc.drawRoundRect(getPosition().getX() - 2, getPosition().getY() - 2, getWidth() + 4, getHeight() + 4, ARC_WIDTH, ARC_HEIGHT);
     } else {
       gc.setColor(Color.BLACK);
       gc.setStroke(new BasicStroke(1));
-      gc.drawRect(getPosition().getX(), getPosition().getY(), getWidth(), getHeight());
+      gc.drawRoundRect(getPosition().getX(), getPosition().getY(), getWidth(), getHeight(), ARC_WIDTH, ARC_HEIGHT);
     }
     for (Drawable drawable : getCards()) {
       if (drawable == null) continue;

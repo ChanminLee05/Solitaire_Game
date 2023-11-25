@@ -4,8 +4,10 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 import com.cst8334.solitaire.utils.Entity;
+import com.cst8334.solitaire.utils.ImageLoader;
 import com.cst8334.solitaire.utils.Position2D;
 
 /**
@@ -19,8 +21,11 @@ import com.cst8334.solitaire.utils.Position2D;
  */
 public class Card extends Entity {
 
-  private static final int WIDTH = 50;
-  private static final int HEIGHT = 75;
+  private static final int WIDTH = 72;
+  private static final int HEIGHT = 105;
+
+  private static final int ARC_WIDTH = 10;
+  private static final int ARC_HEIGHT = 10;
 
   /**
    * An enumeration representing the suits of a playing card.
@@ -160,28 +165,37 @@ public class Card extends Entity {
     if (isSelected()) {
       gc.setColor(Color.GREEN);
       gc.setStroke(new BasicStroke(2));
-      gc.drawRect(getPosition().getX()-1, getPosition().getY()-1, WIDTH+2, HEIGHT+2);
+      gc.drawRoundRect(getPosition().getX()-1, getPosition().getY()-1, WIDTH+2, HEIGHT+2, ARC_WIDTH, ARC_HEIGHT);
     } else {
       gc.setColor(Color.BLACK);
       gc.setStroke(new BasicStroke(1));
-      gc.drawRect(getPosition().getX()-1, getPosition().getY()-1, WIDTH+1, HEIGHT+1);
+      gc.drawRoundRect(getPosition().getX()-1, getPosition().getY()-1, WIDTH+1, HEIGHT+1, ARC_WIDTH, ARC_HEIGHT);
     }
     // Draw the card contents
     if (!isFaceUp()) {
       gc.setColor(Color.blue);
-      gc.fillRect(getPosition().getX(), getPosition().getY(), WIDTH, HEIGHT);
+      gc.fillRoundRect(getPosition().getX(), getPosition().getY(), WIDTH, HEIGHT, ARC_WIDTH, ARC_HEIGHT);
     } else {
       gc.setColor(Color.white);
-      gc.fillRect(getPosition().getX(), getPosition().getY(), WIDTH, HEIGHT);
-      // Set the color of the card based on its suit
-      if (suit == SUITS.DIAMONDS || suit == SUITS.HEARTS) {
-        gc.setColor(Color.red);
+      gc.fillRoundRect(getPosition().getX(), getPosition().getY(), WIDTH, HEIGHT, ARC_WIDTH, ARC_HEIGHT);
+
+      ImageLoader imageLoader = ImageLoader.getInstance();
+      BufferedImage image = imageLoader.loadImage(toString() + ".png");
+      if (image != null) {
+        BufferedImage scaledImage = imageLoader.scaleImage(image, WIDTH, HEIGHT);
+        gc.drawImage(scaledImage, getPosition().getX(), getPosition().getY(), WIDTH, HEIGHT, null);
       } else {
-        gc.setColor(Color.black);
+        System.out.println("Image not found: " + toString() + ".png");
+        // Set the color of the card based on its suit
+        if (suit == SUITS.DIAMONDS || suit == SUITS.HEARTS) {
+          gc.setColor(Color.red);
+        } else {
+          gc.setColor(Color.black);
+        }
+        // Draw the suit and value of the card
+        gc.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 16));
+        gc.drawString(toString(), getPosition().getX() + 5, getPosition().getY() + 15);
       }
-      // Draw the suit and value of the card
-      gc.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 16));
-      gc.drawString(toString(), getPosition().getX() + 5, getPosition().getY() + 15);
     }
   }
 

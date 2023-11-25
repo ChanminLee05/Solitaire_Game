@@ -124,7 +124,7 @@ public class CardMovementHandler {
       // move the card to the left a bit
       Position2D cardPosition = Position2D.Zero();
       cardPosition.setY(stackPosition.getY());
-      cardPosition.setX(stackPosition.getX() + (35 * i));
+      cardPosition.setX(stackPosition.getX() - (35 * i));
       nextStack.push(card);
       card.setPosition(cardPosition);
     }
