@@ -23,6 +23,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import com.cst8334.solitaire.cardstacks.CardStack;
+import com.cst8334.solitaire.utils.CardMovementHandler;
 import com.cst8334.solitaire.utils.CardMovementHandlerVegasRules;
 import com.cst8334.solitaire.utils.Drawable;
 import com.cst8334.solitaire.utils.Selectable;
@@ -54,7 +55,7 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	   * The card movement handler for the game.
 	   */
 	  private CardMovementHandlerVegasRules cardMovementHandlerVR;
-
+  
 	  /*
 	   * New game button (restart)
 	   */
@@ -87,13 +88,13 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	    // Vegas cumulative switch
 	    private JCheckBox vegasCumulativeSwitch;
 
-
 	    /**
 	     * Constructs a new instance of the Solitaire game.
 	     * Initializes the game state and sets up a timer for rendering.
 	     */
 	    public VegasRulesSolitaire() {
 	        state = VegasRulesState.initialState(false, 0);
+
 	        cardMovementHandlerVR = new CardMovementHandlerVegasRules();
 	        Timer renderTimer = new Timer(1000 / 60, this);
 	        addMouseListener(new SolitaireGameMouseListener(this::handleMouseClick));
@@ -220,6 +221,7 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	          JFrame vegasRulesWindow = (JFrame) SwingUtilities.getWindowAncestor(this);
 	          vegasRulesWindow.dispose();
 	          // Open the Solitaire window
+
 	    	  JFrame window = new JFrame("Solitaire");
 	    	  window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	    	  window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -228,9 +230,9 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	    	  window.add(game);
 
 	    	  window.setVisible(true);
-
 	      } else if (e.getSource() == FreeCellButton) {
 	    	  //when user clicks on FreeCellButton, another window pops open of free cell solitaire
+
 	    	  JFrame FCwindow = new JFrame("Free Cell Solitaire");
 	    	  FCwindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	    	  FCwindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -242,13 +244,10 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 
 	    	  FCwindow.setVisible(true);
 
-
 	      } else if (e.getSource() == vegasCumulativeSwitch) {
 	            // Toggle the Vegas cumulative option based on the switch state
 	            state.setVegasCumulative(vegasCumulativeSwitch.isSelected());
-	      }
-
-	      else if (e.getSource() == drawThreeSwitch) {
+        } else if (e.getSource() == drawThreeSwitch) {
 	            // Toggle the Vegas cumulative option based on the switch state
 	            state.setDrawThreeOption(drawThreeSwitch.isSelected());
 	      }
@@ -279,3 +278,4 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	    }
 	  }
 	}
+

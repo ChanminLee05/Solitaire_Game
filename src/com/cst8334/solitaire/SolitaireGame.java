@@ -222,10 +222,13 @@ public class SolitaireGame extends JPanel implements ActionListener {
           state = SolitaireState.initialState();
       } else if (e.getSource() == spiderSolitaireButton) {
           // Handle Spider Solitaire button click (change game settings)
+
+	 //when user clicks on Vegas Rules Solitaire button, another window pops open for vegas rules solitaire     
       } else if (e.getSource() == vegasSolitaireButton) {
     	  //when user clicks on Vegas Rules Solitaire button, it closes Klondlike game and opens Vegas rules solitaire
-		  JFrame vegasRulesWindow = (JFrame) SwingUtilities.getWindowAncestor(this);
-		  vegasRulesWindow.dispose();
+		    JFrame vegasRulesWindow = (JFrame) SwingUtilities.getWindowAncestor(this);
+		    vegasRulesWindow.dispose();
+
     	  JFrame VRwindow = new JFrame("Vegas Solitaire");
     	  VRwindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     	  VRwindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -235,6 +238,7 @@ public class SolitaireGame extends JPanel implements ActionListener {
 
     	  VRwindow.setVisible(true);
       }
+
 
       // Update the score label
       scoreValueLabel.setText(Integer.toString(state.getScore()));

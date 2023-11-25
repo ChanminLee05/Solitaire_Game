@@ -40,7 +40,6 @@ public class VegasRulesState {
 	  private boolean drawThreeOption;
 
 
-
 	  /**
 	   * Private constructor to prevent direct instantiation of the class.
 	   */
@@ -98,7 +97,6 @@ public class VegasRulesState {
 	  public Timer getTimer() {
 	    return timer;
 	  }
-
 
 	  /**
 	     * Sets the Vegas cumulative option.
@@ -206,6 +204,7 @@ public class VegasRulesState {
 	    }
 	    return stacks;
 	  }
+
 
 
 	}
