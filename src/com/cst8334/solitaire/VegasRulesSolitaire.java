@@ -134,18 +134,11 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 
 	        // Game mode buttons
 	        /* 
-	         * spider solitaire button
+	         * klondike solitaire button
 	         */
 	        OriginalSolitaireButton = new JButton("Klondike Solitaire");
 	        OriginalSolitaireButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 	        OriginalSolitaireButton.addActionListener(this);
-
-	        /*
-	         * vegas Rules solitaire button 
-	         */
-	        FreeCellButton = new JButton("Free Cell Solitaire");
-	        FreeCellButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-	        FreeCellButton.addActionListener(this);
 
 	        // Add components to the left panel
 	        rightPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add some spacing
@@ -159,10 +152,8 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	        rightPanel.add(newGameButton);
 	        rightPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add some spacing
 	        rightPanel.add(separator);
-	        rightPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add some spacing
 	        rightPanel.add(OriginalSolitaireButton);
-	        rightPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Add some spacing
-	        rightPanel.add(FreeCellButton);
+	        rightPanel.add(Box.createRigidArea(new Dimension(0, 30))); // Add some spacing
 
 
 	        // Set BorderLayout for the main panel
@@ -230,19 +221,6 @@ public class VegasRulesSolitaire extends JPanel implements ActionListener {
 	    	  window.add(game);
 
 	    	  window.setVisible(true);
-	      } else if (e.getSource() == FreeCellButton) {
-	    	  //when user clicks on FreeCellButton, another window pops open of free cell solitaire
-
-	    	  JFrame FCwindow = new JFrame("Free Cell Solitaire");
-	    	  FCwindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	    	  FCwindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    	  FCwindow.setLocationRelativeTo(null);
-	    	  
-	    	  //This needs to be changed to FreeCell game once FreeCell class is created
-	    	  SolitaireGame game = new SolitaireGame();
-	    	  FCwindow.add(game);
-
-	    	  FCwindow.setVisible(true);
 
 	      } else if (e.getSource() == vegasCumulativeSwitch) {
 	            // Toggle the Vegas cumulative option based on the switch state

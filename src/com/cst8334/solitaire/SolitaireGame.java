@@ -76,7 +76,7 @@ public class SolitaireGame extends JPanel implements ActionListener {
 	    /**
 	     * spider Solitaire button
 	     */
-	    private JButton spiderSolitaireButton;
+	    private JButton undoButton;
 	    
 	    /*
 	     * vegas Rules Solitaire button
@@ -132,9 +132,9 @@ public class SolitaireGame extends JPanel implements ActionListener {
       /* 
        * spider solitaire button
        */
-      spiderSolitaireButton = new JButton("Spider Solitaire");
-      spiderSolitaireButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-      spiderSolitaireButton.addActionListener(this);
+      undoButton = new JButton("Undo");
+      undoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+      undoButton.addActionListener(this);
 
       /*
        * vegas Rules solitaire button 
@@ -151,10 +151,10 @@ public class SolitaireGame extends JPanel implements ActionListener {
       leftPanel.add(newGameButton);
       leftPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add some spacing
       leftPanel.add(separator);
-      leftPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add some spacing
-      leftPanel.add(spiderSolitaireButton);
-      leftPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Add some spacing
+      leftPanel.add(undoButton);
+      leftPanel.add(Box.createRigidArea(new Dimension(0, 350))); // Add some spacing
       leftPanel.add(vegasSolitaireButton);
+      leftPanel.add(Box.createRigidArea(new Dimension(0, 30))); // Add some spacing
 
 
       // Set BorderLayout for the main panel
@@ -220,11 +220,11 @@ public class SolitaireGame extends JPanel implements ActionListener {
   public void actionPerformed(ActionEvent e) {
       if (e.getSource() == newGameButton) {
           state = SolitaireState.initialState();
-      } else if (e.getSource() == spiderSolitaireButton) {
-          // Handle Spider Solitaire button click (change game settings)
-
-	 //when user clicks on Vegas Rules Solitaire button, another window pops open for vegas rules solitaire     
-      } else if (e.getSource() == vegasSolitaireButton) {
+      } else if (e.getSource() == undoButton) {
+    	  return;	//Needs modification to make it work
+      }
+      	//when user clicks on Vegas Rules Solitaire button, another window pops open for vegas rules solitaire     
+      	else if (e.getSource() == vegasSolitaireButton) {
     	  //when user clicks on Vegas Rules Solitaire button, it closes Klondlike game and opens Vegas rules solitaire
 		    JFrame vegasRulesWindow = (JFrame) SwingUtilities.getWindowAncestor(this);
 		    vegasRulesWindow.dispose();
