@@ -173,7 +173,7 @@ public class Card extends Entity {
     }
     // Draw the card contents
     if (!isFaceUp()) {
-      gc.setColor(Color.blue);
+      gc.setColor(new Color(64, 85, 219));
       gc.fillRoundRect(getPosition().getX(), getPosition().getY(), WIDTH, HEIGHT, ARC_WIDTH, ARC_HEIGHT);
     } else {
       gc.setColor(Color.white);
