@@ -55,15 +55,21 @@ public class CardMovementHandler {
 
 
   private void handleFoundationMovement(SolitaireState state, FoundationCardStack prevStack, CardStack nextStack) {
+	// Throw an error if attempting to move a card from the foundation to the waste deck
+	    if (nextStack instanceof WasteCardStack) {
+	        throw new IllegalArgumentException("Cannot move cards from the foundation to the waste deck");
+	    }
+	    
 	  // if foundation stack card is moved back to tableau stack, it minuses 15 score
 	  if (nextStack instanceof TableauCardStack) {
-		  state.addScore(-15);
+		  state.addScore(-10);
 	  }
 	  
     handleDefaultMovement(state, prevStack, nextStack);
   }
 
   private void handleWasteMovement(SolitaireState state, WasteCardStack prevStack, CardStack nextStack) {
+	// Throw an error if attempting to move a card from the foundation to the waste deck
     if (nextStack instanceof WasteCardStack) {
       throw new IllegalArgumentException("Cannot move cards from the waste to the waste");
     }
@@ -116,15 +122,17 @@ public class CardMovementHandler {
     // center all cards in the waste stack
     Position2D stackPosition = nextStack.getPosition();
     nextStack.getCards().forEach(card -> card.setPosition(stackPosition));
-    // move the top ~3 cards from the deck to the waste stack
-    int toMove = Math.min(2, prevStack.getCards().size());
-    for (int i = 0; i <= toMove; i++) {
+    
+    // Determine how many cards to move based on the drawThreeSwitch checkbox
+    int toMove = state.isDrawThreeOption() ? Math.min(3, prevStack.getCards().size()) : 1;
+    for (int i = 0; i < toMove; i++) {
+
       Card card = prevStack.pop();
       card.setFaceUp(true);
       // move the card to the left a bit
       Position2D cardPosition = Position2D.Zero();
       cardPosition.setY(stackPosition.getY());
-      cardPosition.setX(stackPosition.getX() - (35 * i));
+      cardPosition.setX(stackPosition.getX() + (-45 * i));
       nextStack.push(card);
       card.setPosition(cardPosition);
     }

@@ -143,7 +143,7 @@ public class CardStack extends Entity {
       return null;
     }
   }
-
+  
   /**
    * Shuffles the cards in the stack.
    */

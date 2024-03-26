@@ -11,12 +11,16 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,9 +29,17 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import com.cst8334.solitaire.cards.Card;
 import com.cst8334.solitaire.cardstacks.CardStack;
+import com.cst8334.solitaire.cardstacks.CardStackFactory;
+import com.cst8334.solitaire.cardstacks.DeckCardStack;
+import com.cst8334.solitaire.cardstacks.FoundationCardStack;
+import com.cst8334.solitaire.cardstacks.TableauCardStack;
+import com.cst8334.solitaire.cardstacks.WasteCardStack;
+import com.cst8334.solitaire.utils.CardMove;
 import com.cst8334.solitaire.utils.CardMovementHandler;
 import com.cst8334.solitaire.utils.Drawable;
+import com.cst8334.solitaire.utils.Firework;
 import com.cst8334.solitaire.utils.Selectable;
 import com.cst8334.solitaire.utils.SolitaireGameMouseListener;
 
@@ -50,7 +62,7 @@ public class SolitaireGame extends JPanel implements ActionListener {
 	  /**
 	   * The title of the game window.
 	   */
-	  private static final String WINDOW_TITLE = "Solitaire";
+	  private static final String WINDOW_TITLE = "Solitaire Game";
 
 	  /**
 	   * The width of the game window.
@@ -60,7 +72,7 @@ public class SolitaireGame extends JPanel implements ActionListener {
 	  /**
 	   * The height of the game window.
 	   */
-	  private static final int WINDOW_HEIGHT = 600;
+	  private static final int WINDOW_HEIGHT = 800;
 
 	  /**
 	   * The current state of the Solitaire game.
@@ -82,6 +94,8 @@ public class SolitaireGame extends JPanel implements ActionListener {
 	     */
 	    private JButton undoButton;
 	    
+	    private Stack<CardMove> moveHistory;
+	    
 	    /*
 	     * Vegas Rules Solitaire button
 	     */
@@ -96,6 +110,9 @@ public class SolitaireGame extends JPanel implements ActionListener {
 	     * label for the value of the score
 	     */
 	    private JLabel scoreValueLabel;
+	 
+	    // Solitaire drawThree switch
+	    private JCheckBox drawThreeSwitch;
 
   /**
    * Constructs a new instance of the Solitaire game.
@@ -125,6 +142,14 @@ public class SolitaireGame extends JPanel implements ActionListener {
       scoreValueLabel.setFont(new Font("Arial", Font.BOLD, 16)); // Set font and style
       scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
       scoreValueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+      
+      // Draw Three option switch
+      drawThreeSwitch = new JCheckBox("Draw 3 option");
+      drawThreeSwitch.setAlignmentX(Component.CENTER_ALIGNMENT);
+      drawThreeSwitch.setBackground(new Color(7, 92, 7));
+      drawThreeSwitch.setFocusPainted(false);
+      drawThreeSwitch.addActionListener(this);
+      
       // Set the image as the button's icon
       ImageIcon restartIcon = new ImageIcon("..\\CST8334-Solitaire\\src\\main\\resources\\imgs\\restart.png");
       newGameButton = new JButton("Restart Game", restartIcon);
@@ -190,12 +215,14 @@ public class SolitaireGame extends JPanel implements ActionListener {
       leftPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Add some spacing
       leftPanel.add(scoreLabel);
       leftPanel.add(scoreValueLabel);
-      leftPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add some spacing
+      leftPanel.add(Box.createRigidArea(new Dimension(0, 30))); // Add some spacing
+      leftPanel.add(drawThreeSwitch);
+      leftPanel.add(Box.createRigidArea(new Dimension(0, 30))); // Add some spacing
       leftPanel.add(newGameButton);
       leftPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add some spacing
       leftPanel.add(separator);
       leftPanel.add(undoButton);
-      leftPanel.add(Box.createRigidArea(new Dimension(0, 250))); // Add some spacing
+      leftPanel.add(Box.createRigidArea(new Dimension(0, 300))); // Add some spacing
       leftPanel.add(vegasSolitaireButton);
       leftPanel.add(Box.createRigidArea(new Dimension(0, 30))); // Add some spacing
 
@@ -205,6 +232,8 @@ public class SolitaireGame extends JPanel implements ActionListener {
 
       // Add right panel to the right of the main panel
       add(leftPanel, BorderLayout.EAST);
+      
+      moveHistory = new Stack<>();
   }
   
 
@@ -214,7 +243,10 @@ public class SolitaireGame extends JPanel implements ActionListener {
    * @param args Command-line arguments (not used).
    */
   public static void main(String[] args) {
+	  ImageIcon favicon = new ImageIcon("..\\CST8334-Solitaire\\src\\main\\resources\\imgs\\cards.png");
+	  
       JFrame window = new JFrame(WINDOW_TITLE);
+      window.setIconImage(favicon.getImage());
       window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
       window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       window.setLocationRelativeTo(null);
@@ -254,13 +286,101 @@ public class SolitaireGame extends JPanel implements ActionListener {
       gc.setFont(new Font("Arial", Font.PLAIN, 16));
       // Do not draw the score in the bottom left corner here
 
-      // Iterate through the drawable objects in the game state and draw them
-      for (Drawable drawable : state.getStacks()) {
-          if (drawable == null) continue;
-          drawable.draw((Graphics2D) gc);
+   // Check if Tableau stacks are empty
+      boolean tableauEmpty = true;
+      for (CardStack stack : state.getStacks()) {
+          if (stack instanceof TableauCardStack) {
+              if (!stack.isEmpty()) {
+            	  //change to false later
+                  tableauEmpty = false;
+                  break;
+              }
+          }
+      }
+      
+   // Draw animation if both Deck and Tableau stacks are empty
+      if (tableauEmpty) {
+          drawAnimation(gc);
+	  } else {
+	      // Iterate through the drawable objects in the game state and draw them
+	      for (Drawable drawable : state.getStacks()) {
+	          if (drawable == null) continue;
+	          drawable.draw((Graphics2D) gc);
+	      }
       }
   }
 
+  private ArrayList<Firework> fireworks = new ArrayList<>();
+  private Random random = new Random();
+  
+	//Fireworks animation method
+	private void drawAnimation(Graphics gc) {
+	   
+	    for (Firework firework : fireworks) {
+	        firework.draw(gc);
+	    }
+	    
+		// Draw the animation here
+	   gc.setColor(Color.red);
+	   gc.setFont(new Font("Arial", Font.BOLD, 24));
+	   String message = "Congratulations! You have completed the game!";
+	   int messageWidth = gc.getFontMetrics().stringWidth(message);
+	   int x = (getWidth() - messageWidth) / 5;
+	   int y = getHeight() / 2;
+	   gc.drawString(message, x, y);
+	}
+	
+	private void updateFireworks() {
+	    fireworks.removeIf(Firework::isBurntOut);
+	    if (random.nextInt(100) < 10) {
+	        fireworks.add(new Firework(random.nextInt(getWidth()), getHeight()));
+	    }
+	}
+	
+	/**
+     * Reverts the last move made by the player.
+     */
+    private void undo() {
+    	if (!moveHistory.isEmpty()) {
+            CardMove lastMove = moveHistory.pop();
+            CardStack sourceStack = lastMove.getDestinationStack();
+            CardStack prevStack = lastMove.getSourceStack();
+            
+         // Debugging information
+            System.out.println("Source Stack: " + sourceStack);
+            System.out.println("Prev Stack: " + prevStack);
+            
+            if (sourceStack != null && prevStack != null && sourceStack instanceof FoundationCardStack && prevStack instanceof TableauCardStack) {
+                // Subtract 5 from the score only if moving from FoundationCardStack to TableauCardStack
+                state.addScore(-10);
+            }
+            
+            if (sourceStack != null && prevStack != null && sourceStack instanceof TableauCardStack && prevStack instanceof TableauCardStack) {
+                // Subtract 5 from the score only if moving from FoundationCardStack to TableauCardStack
+                state.addScore(-5);
+            }
+            
+            // Check if the source and prev stacks are not null
+            if (sourceStack != null && !sourceStack.equals(prevStack)) {
+            	((TableauCardStack) prevStack).setUndoPush(true);
+                // Remove the card from the prev stack
+                Card movedCard = sourceStack.pop();
+                
+             // Debugging information
+                System.out.println("Moved Card: " + movedCard);
+                
+                // Add the card back to the prev stack
+                prevStack.push(movedCard);
+                
+                ((TableauCardStack) prevStack).setUndoPush(false);
+                // Debugging information
+                System.out.println("Card pushed to Prev Stack");
+
+            }
+            
+        }
+    }	
+    
   /**
    * Implements the actionPerformed method from the ActionListener interface.
    * Repaints the game panel to update the rendering.
@@ -269,10 +389,12 @@ public class SolitaireGame extends JPanel implements ActionListener {
    */
   @Override
   public void actionPerformed(ActionEvent e) {
+	  ImageIcon favicon = new ImageIcon("..\\CST8334-Solitaire\\src\\main\\resources\\imgs\\cards.png");
       if (e.getSource() == newGameButton) {
           state = SolitaireState.initialState();
+          drawThreeSwitch.setSelected(false);
       } else if (e.getSource() == undoButton) {
-    	  return;	//Needs modification to make it work
+    	  undo();
       }
       	//when user clicks on Vegas Rules Solitaire button, another window pops open for vegas rules solitaire     
       	else if (e.getSource() == vegasSolitaireButton) {
@@ -281,6 +403,7 @@ public class SolitaireGame extends JPanel implements ActionListener {
 		    vegasRulesWindow.dispose();
 
     	  JFrame VRwindow = new JFrame("Vegas Solitaire");
+    	  VRwindow.setIconImage(favicon.getImage());
     	  VRwindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     	  VRwindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	  VRwindow.setLocationRelativeTo(null);
@@ -288,12 +411,17 @@ public class SolitaireGame extends JPanel implements ActionListener {
     	  VRwindow.add(game);
 
     	  VRwindow.setVisible(true);
+      } else if (e.getSource() == drawThreeSwitch) {
+    	  
+          // Toggle the Vegas cumulative option based on the switch state
+          state.setDrawThreeOption(drawThreeSwitch.isSelected());
       }
-
 
       // Update the score label
       scoreValueLabel.setText(Integer.toString(state.getScore()));
 
+      updateFireworks();
+      
       // Update the UI, e.g., repaint or modify the labels
       repaint();
   }
@@ -308,7 +436,22 @@ public class SolitaireGame extends JPanel implements ActionListener {
         return;
       }
       try {
-        cardMovementHandler.handleCardMovement(state, state.getSelectedStack(), (CardStack) selectable);
+    	  CardStack sourceStack = state.getSelectedStack();
+          CardStack prevStack = (CardStack) selectable;
+          
+          // Make the move using cardMovementHandlerVR
+          cardMovementHandler.handleCardMovement(state, state.getSelectedStack(), (CardStack) selectable);
+          
+            System.out.println("Move made from " + sourceStack + " to " + prevStack);
+            
+            if (!sourceStack.equals(prevStack)) {
+            	if (!(sourceStack instanceof WasteCardStack || sourceStack instanceof DeckCardStack)) {
+		          // Create a CardMove object and push it onto the move history stack
+		          moveHistory.push(new CardMove(sourceStack, prevStack));
+            	}
+            }
+          
+            System.out.println("Move history size: " + moveHistory.size());
       } catch (Exception e) {
         System.out.println(e.getMessage());
       }

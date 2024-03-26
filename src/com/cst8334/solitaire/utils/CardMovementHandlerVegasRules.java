@@ -55,10 +55,15 @@ public class CardMovementHandlerVegasRules {
 
 
 	  private void handleFoundationMovement(VegasRulesState state, FoundationCardStack prevStack, CardStack nextStack) {
+		// Throw an error if attempting to move a card from the foundation to the waste deck
+	    if (nextStack instanceof WasteCardStack) {
+	      throw new IllegalArgumentException("Cannot move cards from the foundation to the waste");
+	    }
+	    
 	    handleDefaultMovement(state, prevStack, nextStack);
 	  }
 
-	  private void handleWasteMovement(VegasRulesState state, WasteCardStack prevStack, CardStack nextStack) {
+	  private void handleWasteMovement(VegasRulesState state, WasteCardStack prevStack, CardStack nextStack) {	    
 	    if (nextStack instanceof WasteCardStack) {
 	      throw new IllegalArgumentException("Cannot move cards from the waste to the waste");
 	    }
@@ -114,7 +119,7 @@ public class CardMovementHandlerVegasRules {
 	      // move the card to the left a bit
 	      Position2D cardPosition = Position2D.Zero();
 	      cardPosition.setY(stackPosition.getY());
-	      cardPosition.setX(stackPosition.getX() + (35 * i));
+	      cardPosition.setX(stackPosition.getX() + (-45 * i));
 	      nextStack.push(card);
 	      card.setPosition(cardPosition);
 	    }
@@ -130,7 +135,13 @@ public class CardMovementHandlerVegasRules {
 		    } else if (prevStack instanceof WasteCardStack && nextStack instanceof FoundationCardStack) {
 		        // Each card moved from waste to foundation is also worth +5 points
 		        scoreChange += 5;
-		    } 
+		    }
+		    
+		    // Scoring based on moving cards from the foundation stacks to tableau
+		    if (prevStack instanceof FoundationCardStack && nextStack instanceof TableauCardStack) {
+		        // Each card moved from foundation to tableau is worth -5 points
+		        scoreChange -= 5;
+		    }
 		    return scoreChange;
 		}
 
