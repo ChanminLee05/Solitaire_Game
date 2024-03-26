@@ -42,6 +42,11 @@ public class SolitaireState {
    * The selected card stack.
    */
   private CardStack selectedStack;
+  
+  /**
+   * draw three option switch boolean (to check if it is enabled or not)
+   */
+  private boolean drawThreeOption;
 
   /**
    * Private constructor to prevent direct instantiation of the class.
@@ -113,6 +118,14 @@ public class SolitaireState {
     return selectedStack;
   }
 
+  public boolean isDrawThreeOption() {
+      return drawThreeOption;
+  }
+
+  public void setDrawThreeOption(boolean drawThreeOption) {
+      this.drawThreeOption = drawThreeOption;
+  }
+  
   /**
    * Creates and returns the initial card stacks for a Solitaire game.
    *
@@ -120,8 +133,8 @@ public class SolitaireState {
    */
   private static List<CardStack> createInitialCardStacks() {
     List<CardStack> stacks = new ArrayList<CardStack>();
-    stacks.add(CardStackFactory.createCardStack(TYPES.DECK, new Position2D(700, 50)));
-    stacks.add(CardStackFactory.createCardStack(TYPES.WASTE, new Position2D(600, 50)));
+    stacks.add(CardStackFactory.createCardStack(TYPES.DECK, new Position2D(650, 50)));
+    stacks.add(CardStackFactory.createCardStack(TYPES.WASTE, new Position2D(550, 50)));
     for (int i = 0; i < 4; i++) {
       stacks.add(CardStackFactory.createCardStack(TYPES.FOUNDATION, new Position2D(10 + (i * 100), 50)));
     }

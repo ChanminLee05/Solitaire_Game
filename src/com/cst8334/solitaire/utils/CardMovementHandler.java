@@ -27,30 +27,59 @@ public class CardMovementHandler {
     }
   }
 
-  private void handleTableauMovement(SolitaireState state, TableauCardStack prevStack, CardStack nextStack) {
-    if (nextStack.getClass() == TableauCardStack.class) {
-      List<Card> faceUpCards = prevStack.getFaceUpCards();
-      int toRemove = 0;
-      for (Card card : faceUpCards) {
-        if (!((TableauCardStack) nextStack).canPush(card)) continue;
-        nextStack.push(card);
-        toRemove++;
-      }
-      for (int i = 0; i < toRemove; i++) {
-        prevStack.pop();
-      }
-      System.out.println(prevStack.getLast());
-      prevStack.getLast().setFaceUp(true);
-      return;
-    }
-    handleDefaultMovement(state, prevStack, nextStack);
-  }
+   private void handleTableauMovement(SolitaireState state, TableauCardStack prevStack, CardStack nextStack) {
+	    if (nextStack instanceof WasteCardStack) {
+	        throw new IllegalArgumentException("Cannot move cards from the tableau to the waste");
+	    } else if (nextStack instanceof FoundationCardStack) {
+        state.addScore(10);
+	    }
+
+	    if (nextStack.getClass() == TableauCardStack.class) {
+	        List<Card> faceUpCards = prevStack.getFaceUpCards();
+	        int toRemove = 0;
+	        for (Card card : faceUpCards) {
+	            if (!((TableauCardStack) nextStack).canPush(card)) continue;
+	            nextStack.push(card);
+	            toRemove++;
+	        }
+	        for (int i = 0; i < toRemove; i++) {
+	            prevStack.pop();
+	        }
+	        System.out.println(prevStack.getLast());
+	        prevStack.getLast().setFaceUp(true);
+	        state.addScore(5);
+	        return;
+	    }
+	    handleDefaultMovement(state, prevStack, nextStack);
+	}
+
 
   private void handleFoundationMovement(SolitaireState state, FoundationCardStack prevStack, CardStack nextStack) {
+	// Throw an error if attempting to move a card from the foundation to the waste deck
+	    if (nextStack instanceof WasteCardStack) {
+	        throw new IllegalArgumentException("Cannot move cards from the foundation to the waste deck");
+	    }
+	    
+	  // if foundation stack card is moved back to tableau stack, it minuses 15 score
+	  if (nextStack instanceof TableauCardStack) {
+		  state.addScore(-10);
+	  }
+	  
     handleDefaultMovement(state, prevStack, nextStack);
   }
 
   private void handleWasteMovement(SolitaireState state, WasteCardStack prevStack, CardStack nextStack) {
+	// Throw an error if attempting to move a card from the foundation to the waste deck
+    if (nextStack instanceof WasteCardStack) {
+      throw new IllegalArgumentException("Cannot move cards from the waste to the waste");
+    }
+    
+    // moving card to tableau stack adds 5 score and 10 score to foundation stack
+    if (nextStack instanceof TableauCardStack) {
+		  state.addScore(5);
+	  } else if (nextStack instanceof FoundationCardStack) {
+		  state.addScore(10);
+	  }
     handleDefaultMovement(state, prevStack, nextStack);
   }
 
@@ -58,7 +87,9 @@ public class CardMovementHandler {
   private void handleDeckMovement(SolitaireState state, DeckCardStack prevStack, CardStack nextStack) {
 	  if (nextStack instanceof WasteCardStack) {
 	    handleDeckToWasteMovement(state, prevStack, (WasteCardStack) nextStack);
-	  } else {
+	  } else if (nextStack instanceof DeckCardStack) {
+      handleDeckToDeckMovement(state, prevStack, (DeckCardStack) nextStack);
+    } else {
 	    throw new IllegalArgumentException("Cannot move cards from the deck to a non-waste deck stack");
 	  }
 	}
@@ -88,9 +119,22 @@ public class CardMovementHandler {
 
   private void handleDeckToWasteMovement(SolitaireState state, DeckCardStack prevStack, WasteCardStack nextStack) {
     System.out.println("Deck to waste movement");
-    int toMove = Math.min(2, prevStack.getCards().size());
-    for (; toMove > 0; toMove--) {
-      nextStack.push(prevStack.pop());
+    // center all cards in the waste stack
+    Position2D stackPosition = nextStack.getPosition();
+    nextStack.getCards().forEach(card -> card.setPosition(stackPosition));
+    
+    // Determine how many cards to move based on the drawThreeSwitch checkbox
+    int toMove = state.isDrawThreeOption() ? Math.min(3, prevStack.getCards().size()) : 1;
+    for (int i = 0; i < toMove; i++) {
+
+      Card card = prevStack.pop();
+      card.setFaceUp(true);
+      // move the card to the left a bit
+      Position2D cardPosition = Position2D.Zero();
+      cardPosition.setY(stackPosition.getY());
+      cardPosition.setX(stackPosition.getX() + (-45 * i));
+      nextStack.push(card);
+      card.setPosition(cardPosition);
     }
   }
 

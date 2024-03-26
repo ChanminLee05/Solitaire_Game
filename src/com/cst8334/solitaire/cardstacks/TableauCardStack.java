@@ -8,49 +8,65 @@ import com.cst8334.solitaire.cards.Card.VALUES;
 import com.cst8334.solitaire.utils.Position2D;
 
 public class TableauCardStack extends CardStack {
+	
+	private boolean undoPush;
 
-  public TableauCardStack() {
+	public TableauCardStack() {
 
-  }
+	}
 
-  public TableauCardStack(List<Card> card) {
-    super();
-  }
+	public TableauCardStack(List<Card> card) {
+		super();
+	}
 
-  public TableauCardStack(List<Card> cards, Position2D position) {
-    super(cards, position);
-    for (int i = 0; i < getCards().size(); i++) {
-      int yPos = getPosition().getY() + i * 25;
-      getCards().get(i).setPosition(new Position2D(getPosition().getX(), yPos));
-    }
-  }
+	public TableauCardStack(List<Card> cards, Position2D position) {
+		super(cards, position);
+		
+		for (int i = 0; i < getCards().size(); i++) {
+			int yPos = getPosition().getY() + i * 25;
+			getCards().get(i).setPosition(new Position2D(getPosition().getX() + PADDING, yPos + PADDING));
+		}
+	}
+	
+	public void setUndoPush(boolean undoPush) {
+	    this.undoPush = undoPush;
+	}
 
   /**
    * Returns a list of face-up cards in the stack.
    * 
    * @return A list of face-up cards in the stack.
    */
-  public List<Card> getFaceUpCards() {
-    return getCards().stream().filter(Card::isFaceUp).toList();
-  }
+	public List<Card> getFaceUpCards() {
+		return getCards().stream().filter(Card::isFaceUp).toList();
+	}
 
-  public boolean canPush(Card card) {
-    if (isEmpty()) {
-      return card.getValue() == VALUES.KING;
-    }
-    Card topCard = getLast();
-    if (topCard.isFaceUp() && topCard.getValue().ordinal() - 1 != card.getValue().ordinal()) {
-      return false;
-    }
-    if ((topCard.getSuit() == SUITS.HEARTS || topCard.getSuit() == SUITS.DIAMONDS) &&
-        !(card.getSuit() == SUITS.CLUBS || card.getSuit() == SUITS.SPADES)) {
-      return false;
-    }
-    if ((topCard.getSuit() == SUITS.CLUBS || topCard.getSuit() == SUITS.SPADES) &&
-        !(card.getSuit() == SUITS.HEARTS || card.getSuit() == SUITS.DIAMONDS)) {
-      return false;
-    }
-    return true;
+	public boolean canPush(Card card) {
+		if (undoPush) {
+            return true; // Always return true during undo operation
+        }
+		
+		if (isEmpty()) {
+			return card.getValue() == VALUES.KING;
+		}
+		
+		Card topCard = getLast();
+    
+	    if (topCard.isFaceUp() && topCard.getValue().ordinal() - 1 != card.getValue().ordinal()) {
+	    	return false;
+	    }
+    
+	    if ((topCard.getSuit() == SUITS.HEARTS || topCard.getSuit() == SUITS.DIAMONDS) &&
+	        !(card.getSuit() == SUITS.CLUBS || card.getSuit() == SUITS.SPADES)) {
+	    	return false;
+	    }
+	    
+	    if ((topCard.getSuit() == SUITS.CLUBS || topCard.getSuit() == SUITS.SPADES) &&
+	        !(card.getSuit() == SUITS.HEARTS || card.getSuit() == SUITS.DIAMONDS)) {
+	    	return false;
+	    }
+    
+	    return true;
   }
 
   @Override
@@ -65,33 +81,24 @@ public class TableauCardStack extends CardStack {
      * and if the second card's value is one lower than the first card
      */
     if (isEmpty()) {
-      if (card.getValue() == VALUES.KING) {
+      if (card.getValue() == VALUES.KING || undoPush) {
         super.push(card);
         card.setFaceUp(true);
       } else {
         throw new IllegalArgumentException("Only King card can be placed when there is no card on stack");
       }
     } else {
-      Card topCard = getLast();
-
-      if (topCard.isFaceUp() && topCard.getValue().ordinal() - 1 == card.getValue().ordinal()) {
-        if ((topCard.getSuit() == SUITS.HEARTS || topCard.getSuit() == SUITS.DIAMONDS) &&
-            (card.getSuit() == SUITS.CLUBS || card.getSuit() == SUITS.SPADES)) {
-          super.push(card);
-          card.setFaceUp(true);
-        } else if ((topCard.getSuit() == SUITS.CLUBS || topCard.getSuit() == SUITS.SPADES) &&
-            (card.getSuit() == SUITS.HEARTS || card.getSuit() == SUITS.DIAMONDS)) {
-          super.push(card);
-          card.setFaceUp(true);
+    	if (canPush(card)) {
+            super.push(card);
+            card.setFaceUp(true);
+        } else {
+            throw new IllegalArgumentException("Different color and suit, or 1 lower value card should be placed");
         }
-      } else {
-        throw new IllegalArgumentException("Different color and suit, or 1 lower value card should be placed");
-      }
     }
     int yPos = getPosition().getY() + (getCards().size() - 1) * 25;
-    card.setPosition(new Position2D(getPosition().getX(), yPos));
+    card.setPosition(new Position2D(getPosition().getX() + PADDING, yPos + PADDING));
   }
-
+  
   @Override
   public Card pop() {
     // Check if there are cards in the stack
