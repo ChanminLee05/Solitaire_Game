@@ -1,14 +1,13 @@
 package test.cst8334.solitaire.cards;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
-
+import com.cst8334.solitaire.cards.Card;
 import com.cst8334.solitaire.cards.Card.SUITS;
 import com.cst8334.solitaire.cards.Card.VALUES;
-import com.cst8334.solitaire.cards.Card;
 import com.cst8334.solitaire.cards.CardBuilder;
 import com.cst8334.solitaire.utils.Position2D;
+import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class CardBuilderTest {
 
